@@ -18,15 +18,19 @@ export class User extends BaseEntity {
   id: number;
 
   @Column({ type: 'varchar', length: 40 })
+  @Field(() => String)
   username: string;
 
   @Column({ type: 'varchar', length: 100 })
+  @Field(() => String)
   password: string;
 
   @CreateDateColumn({ type: 'timestamp' })
+  @Field(() => Date)
   created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
+  @Field(() => Date)
   updated_at: Date;
 
   @BeforeInsert()
