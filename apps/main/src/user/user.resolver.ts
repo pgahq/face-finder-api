@@ -5,14 +5,15 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
+const saltOrRounds = 10;
+
 @Resolver(() => User)
 export class UserResolver {
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    const salt = await bcrypt.genSalt();
     const user = new User();
     user.username = createUserInput.username;
-    user.password = await bcrypt.hash(createUserInput.password, salt);
+    user.password = await bcrypt.hash(createUserInput.password, saltOrRounds);
     return await user.save();
   }
 
@@ -41,7 +42,7 @@ export class UserResolver {
       user.username = updateUserInput.username;
     }
     if (updateUserInput.password) {
-      user.password = updateUserInput.password;
+      user.password = await bcrypt.hash(updateUserInput.password, saltOrRounds);
     }
     return await user.save();
   }
