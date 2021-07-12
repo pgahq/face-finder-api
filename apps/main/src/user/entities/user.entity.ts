@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 
 @ObjectType()
-@Entity('users')
+@Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)

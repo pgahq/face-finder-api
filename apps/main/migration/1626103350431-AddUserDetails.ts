@@ -1,29 +1,37 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
 export class AddUserDetails1626103350431 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE users ADD COLUMN id SERIAL primary key NOT NULL`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE users ADD COLUMN username varchar(40) NOT NULL`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE users ADD COLUMN password varchar(100) NOT NULL`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE users ADD COLUMN created_at timestamp without time zone NOT NULL`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE users ADD COLUMN updated_at timestamp without time zone NOT NULL`,
-    );
+    await queryRunner.addColumns('users', [
+      new TableColumn({
+        name: 'id',
+        type: 'serial',
+        isPrimary: true,
+      }),
+      new TableColumn({
+        name: 'username',
+        type: 'varchar',
+      }),
+      new TableColumn({
+        name: 'password',
+        type: 'varchar',
+      }),
+      new TableColumn({
+        name: 'created_at',
+        type: 'timestamp',
+      }),
+      new TableColumn({
+        name: 'updated_at',
+        type: 'timestamp',
+      }),
+    ]);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE users DROP COLUMN id`);
-    await queryRunner.query(`ALTER TABLE users DROP COLUMN username`);
-    await queryRunner.query(`ALTER TABLE users DROP COLUMN password`);
-    await queryRunner.query(`ALTER TABLE users DROP COLUMN created_at`);
-    await queryRunner.query(`ALTER TABLE users DROP COLUMN updated_at`);
+    await queryRunner.dropColumn('users', 'id');
+    await queryRunner.dropColumn('users', 'username');
+    await queryRunner.dropColumn('users', 'password');
+    await queryRunner.dropColumn('users', 'created_at');
+    await queryRunner.dropColumn('users', 'updated_at');
   }
 }
