@@ -1,0 +1,12 @@
+CommitMsg:
+  CapitalizedSubject:
+    enabled: false
+PreCommit:
+  AuthorName:
+    enabled: false
+  Eslint:
+    enabled: true 
+    description: 'Fix with eslint'
+    required_executable: 'npm'
+    command: ['npm', 'run', 'lint']
+    parallelize: false
