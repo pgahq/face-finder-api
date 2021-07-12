@@ -10,7 +10,7 @@ import { User } from './user/entities/user.entity';
     TypeOrmModule.forRoot(
       {
         autoLoadEntities: true,
-      }
+      },
       // {
       //   type: "postgres",
       //   host: "localhost",

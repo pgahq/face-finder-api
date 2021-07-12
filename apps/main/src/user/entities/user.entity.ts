@@ -1,5 +1,14 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
 
 @ObjectType()
 @Entity('users')
@@ -8,10 +17,10 @@ export class User extends BaseEntity {
   @Field(() => ID)
   id: number;
 
-  @Column({ type: 'varchar', length: 40})
+  @Column({ type: 'varchar', length: 40 })
   username: string;
 
-  @Column({ type: 'varchar', length: 100})
+  @Column({ type: 'varchar', length: 100 })
   password: string;
 
   @CreateDateColumn({ type: 'timestamp' })
@@ -22,7 +31,7 @@ export class User extends BaseEntity {
 
   @BeforeInsert()
   private beforeInsert(): void {
-  // Workaround to solve a bug from 0.2.19 version
+    // Workaround to solve a bug from 0.2.19 version
     this.created_at = new Date();
     this.updated_at = new Date();
   }
