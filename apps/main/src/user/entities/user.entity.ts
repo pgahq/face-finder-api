@@ -32,16 +32,4 @@ export class User extends BaseEntity {
   @UpdateDateColumn({ type: 'timestamp' })
   @Field(() => Date)
   updated_at: Date;
-
-  @BeforeInsert()
-  private beforeInsert(): void {
-    // Workaround to solve a bug from 0.2.19 version
-    this.created_at = new Date();
-    this.updated_at = new Date();
-  }
-
-  @BeforeUpdate()
-  private beforeUpdate(): void {
-    this.updated_at = new Date();
-  }
 }
