@@ -1,35 +1,56 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { UserService } from './user.service';
+import { NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 
+const saltOrRounds = 10;
+
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
-
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.userService.create(createUserInput);
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    const user = new User();
+    user.username = createUserInput.username;
+    user.password = await bcrypt.hash(createUserInput.password, saltOrRounds);
+    return await user.save();
   }
 
-  @Query(() => [User], { name: 'user' })
-  findAll() {
-    return this.userService.findAll();
+  @Query(() => [User], { name: 'users' })
+  async findAll() {
+    const users = await User.find();
+    return users;
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.findOne(id);
+  async findOne(@Args('id', { type: () => Int }) id: number) {
+    const user = await User.findOne(id);
+    if (!user) {
+      throw new NotFoundException(id);
+    }
+    return user;
   }
 
   @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.userService.update(updateUserInput.id, updateUserInput);
+  async updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
+    const user = await User.findOne(updateUserInput.id);
+    if (!user) {
+      throw new NotFoundException(updateUserInput.id);
+    }
+    if (updateUserInput.username) {
+      user.username = updateUserInput.username;
+    }
+    if (updateUserInput.password) {
+      user.password = await bcrypt.hash(updateUserInput.password, saltOrRounds);
+    }
+    return await user.save();
   }
 
   @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.remove(id);
+  async removeUser(@Args('id', { type: () => Int }) id: number) {
+    const user = await User.findOne(id);
+    return await user.remove();
   }
 }
