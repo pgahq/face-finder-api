@@ -1,9 +1,10 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 
 const saltOrRounds = 10;
 
