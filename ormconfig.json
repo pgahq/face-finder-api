@@ -5,7 +5,7 @@
   "username": "postgres",
   "password": "postgres",
   "database": "main",
-  "migrations": ["migration/*.ts"],
+  "migrations": ["migration/*.js"],
   "cli": {
     "migrationsDir": "migration"
   }
