@@ -31,6 +31,7 @@ export class User1626080440790 implements MigrationInterface {
           },
         ],
         indices: [{ columnNames: ['username'] }],
+        uniques: [{ columnNames: ['username'] }],
       }),
       true,
     );
