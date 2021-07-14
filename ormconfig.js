@@ -9,4 +9,5 @@ module.exports = {
   cli: {
     migrationsDir: 'src/migration',
   },
+  logging: true,
 };
