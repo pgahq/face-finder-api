@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
+
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -16,6 +17,6 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: true,
     }),
     UserModule,
-  ],
+  ]
 })
 export class AppModule {}

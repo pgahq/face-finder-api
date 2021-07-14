@@ -2,12 +2,12 @@ import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
 export class LoginType {
-  @Field(() => String, { description: 'Username' })
+  @Field(() => String)
   username: string;
 
-  @Field(() => String, { description: 'Access token' })
+  @Field(() => String)
   access_token: string;
 
-  @Field(() => String, { description: 'Expired in' })
+  @Field(() => String)
   expired_in: string;
 }

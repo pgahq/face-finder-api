@@ -1,11 +1,11 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
-  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
@@ -23,11 +23,22 @@ export class User extends BaseEntity {
   @Field(() => String)
   password: string;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
   updated_at: Date;
+
+  @BeforeInsert()
+  public setDate(): void {
+    this.created_at = new Date();
+    this.updated_at = new Date();
+  }
+
+  @BeforeUpdate()
+  public setUpdateDate(): void {
+    this.updated_at = new Date();
+  }
 }

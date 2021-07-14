@@ -21,17 +21,16 @@ export class User1626080440790 implements MigrationInterface {
           },
           {
             name: 'created_at',
-            type: 'timestamp',
+            type: 'timestamp without time zone',
             isNullable: true,
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
+            type: 'timestamp without time zone',
             isNullable: true,
           },
         ],
-        indices: [{ columnNames: ['username'] }],
-        uniques: [{ columnNames: ['username'] }],
+        indices: [{ columnNames: ['username'], isUnique: true }],
       }),
       true,
     );
