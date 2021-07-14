@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
@@ -14,13 +15,15 @@ import { GqlAuthGuard } from '../auth/guards/gpl-auth.guard';
 import { CurrentUser } from '../decorator/current-user.decorator';
 import { LoginType } from './dto/login.type';
 import { LoginInput } from './dto/login.input';
-import { expiredIn } from '../auth/constant';
 
 const saltOrRounds = 10;
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Mutation(() => User)
   async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
@@ -84,7 +87,7 @@ export class UserResolver {
           username: user.username,
           sub: user.id,
         }),
-        expired_in: expiredIn,
+        expired_in: this.configService.get<string>('auth.expires_in'),
       };
     }
     throw new UnauthorizedException();
