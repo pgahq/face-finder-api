@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { createConnection, getConnectionOptions } from 'typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { getConnectionOptions } from 'typeorm';
 
 import { UserModule } from './user/user.module';
 import { authConfig } from './config';
