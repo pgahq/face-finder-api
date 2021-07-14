@@ -1,0 +1,14 @@
+export TZ=UTC
+
+export JWT_SECRET=asdgdgdsag
+export EXPIRES_IN=3600s
+
+export TYPEORM_CONNECTION=postgres
+export TYPEORM_HOST=localhost
+export TYPEORM_USERNAME=postgres
+export TYPEORM_PASSWORD=postgres
+export TYPEORM_DATABASE=main
+export TYPEORM_PORT=5432
+export TYPEORM_LOGGING=true
+export TYPEORM_MIGRATIONS=dist/migration/*{.ts,.js}
+export TYPEORM_MIGRATIONS_DIR=src/migration

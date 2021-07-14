@@ -30,7 +30,7 @@ export class User1626080440790 implements MigrationInterface {
             isNullable: true,
           },
         ],
-        indices: [{ columnNames: ['username'] }],
+        indices: [{ columnNames: ['username'], isUnique: true }],
       }),
       true,
     );
