@@ -21,12 +21,12 @@ export class User1626080440790 implements MigrationInterface {
           },
           {
             name: 'created_at',
-            type: 'timestamp without time zone',
+            type: 'timestamp',
             isNullable: true,
           },
           {
             name: 'updated_at',
-            type: 'timestamp without time zone',
+            type: 'timestamp',
             isNullable: true,
           },
         ],
