@@ -16,12 +16,14 @@ import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('auth.jwt_secret'),
-        signOptions: { expiresIn: configService.get<string>('auth.expires_in') }
+        signOptions: {
+          expiresIn: configService.get<string>('auth.expires_in'),
+        },
       }),
       inject: [ConfigService],
     }),
   ],
-  
+
   providers: [UserResolver, JwtStrategy],
 })
 export class UserModule {}
