@@ -1,21 +1,21 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import {
   NotFoundException,
-  UseGuards,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
-import { GqlAuthGuard } from 'auth/guards/gpl-auth.guard';
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
+import { GqlAuthGuard } from 'auth/guards/gpl-auth.guard';
 
-import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
-import { LoginType } from './dto/login.type';
 import { LoginInput } from './dto/login.input';
+import { LoginType } from './dto/login.type';
+import { UpdateUserInput } from './dto/update-user.input';
+import { User } from './entities/user.entity';
 
 const saltOrRounds = 10;
 
