@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PassportModule } from '@nestjs/passport';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService, ConfigModule } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { JwtStrategy } from 'auth/strategies/jwt.strategy';
 
-import { UserResolver } from './user.resolver';
 import { User } from './entities/user.entity';
+import { UserResolver } from './user.resolver';
 
 @Module({
   imports: [
