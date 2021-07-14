@@ -4,8 +4,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule } from '@nestjs/config';
 import { getConnectionOptions } from 'typeorm';
 
-import { UserModule } from './user/user.module';
-import { authConfig } from './config';
+import { UserModule } from 'user/user.module';
+import { authConfig } from 'config';
 
 @Module({
   imports: [

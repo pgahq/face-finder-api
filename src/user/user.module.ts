@@ -4,9 +4,10 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 
+import { JwtStrategy } from 'auth/strategies/jwt.strategy';
+
 import { UserResolver } from './user.resolver';
 import { User } from './entities/user.entity';
-import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
 
 @Module({
   imports: [
