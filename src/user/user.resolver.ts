@@ -12,7 +12,7 @@ import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { GqlAuthGuard } from '../auth/guards/gpl-auth.guard';
-import { CurrentUser } from '../decorator/current-user.decorator';
+import { CurrentUser } from '../auth/decorator/current-user.decorator';
 import { LoginType } from './dto/login.type';
 import { LoginInput } from './dto/login.input';
 
