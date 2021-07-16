@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 
 import { authConfig } from 'config';
+import { EventModule } from 'event/event.module';
 import { UserModule } from 'user/user.module';
 
 @Module({
@@ -23,6 +24,7 @@ import { UserModule } from 'user/user.module';
       autoSchemaFile: true,
     }),
     UserModule,
+    EventModule,
   ],
 })
 export class AppModule {}
