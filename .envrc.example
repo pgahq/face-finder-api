@@ -10,5 +10,6 @@ export TYPEORM_PASSWORD=postgres
 export TYPEORM_DATABASE=main
 export TYPEORM_PORT=5432
 export TYPEORM_LOGGING=true
-export TYPEORM_MIGRATIONS=dist/migration/*{.ts,.js}
+export TYPEORM_MIGRATIONS=dist/migration/*.js
 export TYPEORM_MIGRATIONS_DIR=src/migration
+export TYPEORM_MIGRATIONS_RUN=true
