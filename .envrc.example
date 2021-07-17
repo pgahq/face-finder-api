@@ -13,3 +13,6 @@ export TYPEORM_LOGGING=true
 export TYPEORM_MIGRATIONS=dist/migration/*.js
 export TYPEORM_MIGRATIONS_DIR=src/migration
 export TYPEORM_MIGRATIONS_RUN=true
+
+export GRAPHQL_PLAYGROUND=true
+export GRAPHQL_INTROSPECTION=true

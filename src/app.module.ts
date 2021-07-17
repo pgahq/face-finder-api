@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { GraphQLModule } from '@nestjs/graphql';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 
@@ -20,10 +20,14 @@ import { UserModule } from 'user/user.module';
           autoLoadEntities: true,
         }),
     }),
-    GraphQLModule.forRoot({
-      autoSchemaFile: true,
-      playground: true,
-      introspection: true,
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService): Promise<GqlModuleOptions> => ({
+        playground: configService.get<boolean>('graphql.playground'),
+        introspection: configService.get<boolean>('graphql.introspection'),
+        autoSchemaFile: true
+      }),
+      inject: [ConfigService],
     }),
     UserModule,
     EventModule,
