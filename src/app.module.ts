@@ -22,6 +22,8 @@ import { UserModule } from 'user/user.module';
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
+      playground: true,
+      introspection: true,
     }),
     UserModule,
     EventModule,
