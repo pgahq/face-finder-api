@@ -8,7 +8,6 @@ import { getConnectionOptions } from 'typeorm';
 import { authConfig } from 'config';
 import { ConsumerModule } from 'consumer/consumer.module';
 import { EventModule } from 'event/event.module';
-import { ImageModule } from 'image/image.module';
 import { UserModule } from 'user/user.module';
 
 @Module({
@@ -38,7 +37,6 @@ import { UserModule } from 'user/user.module';
     UserModule,
     EventModule,
     ConsumerModule,
-    ImageModule,
   ],
 })
 export class AppModule implements NestModule {

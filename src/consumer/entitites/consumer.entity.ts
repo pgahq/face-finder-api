@@ -19,6 +19,10 @@ export class Consumer extends BaseEntity {
   @Field(() => String)
   email: string;
 
+  @Column({ type: 'varchar' })
+  @Field({nullable: true})
+  selfie_uuid: string;
+
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
   created_at: Date;
