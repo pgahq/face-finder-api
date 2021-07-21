@@ -1,0 +1,1 @@
+export { ComprefaceService } from './compreface';

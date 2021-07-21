@@ -2,21 +2,21 @@ import axios from "axios";
 
 export class ComprefaceService {
     private host: string
-    private api_key: string
-    private base_url: string
-    constructor(host, api_key) {
+    private apiKey: string
+    private baseUrl: string
+    constructor(host, apiKey) {
         this.host = host;
-        this.api_key = api_key
-        this.base_url = 'api/v1/recognition/faces'
+        this.apiKey = apiKey
+        this.baseUrl = 'api/v1/recognition/faces'
     }
 
     fullUrl(): string {
-        return `${this.host}/${this.base_url}`;
+        return `${this.host}/${this.baseUrl}`;
     }
 
     formDataHeader(bodyFormData) {
         let headers = bodyFormData.getHeaders()
-        headers["x-api-key"] = this.api_key;
+        headers["x-api-key"] = this.apiKey;
         return headers
     }
 
@@ -33,8 +33,8 @@ export class ComprefaceService {
         });
     }
 
-    async verify(bodyFormData, image_id, options): Promise<any> {
-        let url = `${this.fullUrl()}/${image_id}/verify`;
+    async verify(bodyFormData, imageId, options): Promise<any> {
+        let url = `${this.fullUrl()}/${imageId}/verify`;
         return new Promise( async (resolve, reject) => {
             try {
                 const response = await axios.post(url, bodyFormData, {headers: this.formDataHeader(bodyFormData), params: options})

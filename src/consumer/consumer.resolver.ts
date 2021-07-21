@@ -3,7 +3,7 @@ import { Consumer } from 'consumer/entitites/consumer.entity';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import * as FormData from 'form-data';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { ComprefaceService } from 'utils/compreface.util';
+import { ComprefaceService } from 'utils';
 import { ConfigService } from '@nestjs/config';
 
 @Resolver()
@@ -27,8 +27,8 @@ export class ConsumerResolver {
       const newConsumer = new Consumer()
       newConsumer.email = email
       try {
-        const selfie_uuid = await comprefaceService.addExample(formData, email, {})
-        newConsumer.selfie_uuid = selfie_uuid
+        const selfieUuid = await comprefaceService.addExample(formData, email, {})
+        newConsumer.selfie_uuid = selfieUuid
       } catch (error) {
         throw new BadRequestException(error);
       };
@@ -43,7 +43,6 @@ export class ConsumerResolver {
       throw new BadRequestException(error);
     };
     
-    console.log(matchSubjects)
     if (Array.isArray(matchSubjects) && matchSubjects.length >= 1) {
       let matchSubject = matchSubjects[0]
       if (matchSubject.similarity >= this.configService.get("compreface.similarity_threshold")) {
