@@ -22,6 +22,8 @@ jobs:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
   update-helm-repo:
+    docker: 
+      - image: cimg/base
     steps:
       - add_ssh_keys
 
