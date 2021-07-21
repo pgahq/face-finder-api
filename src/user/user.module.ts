@@ -16,9 +16,9 @@ import { UserResolver } from './user.resolver';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('auth.jwt_secret'),
+        secret: configService.get<string>('auth.jwtSecret'),
         signOptions: {
-          expiresIn: configService.get<string>('auth.expires_in'),
+          expiresIn: configService.get<string>('auth.expiresIn'),
         },
       }),
       inject: [ConfigService],
