@@ -6,11 +6,11 @@ export class CreateEventInput {
   name: string;
 
   @Field(() => Date)
-  start_time: Date;
+  startTime: Date;
 
   @Field(() => Date)
-  end_time: Date;
+  endTime: Date;
 
-  @Field(() => String)
-  gcs_bucket: string;
+  @Field({nullable: true})
+  gcsBucket: string;
 }

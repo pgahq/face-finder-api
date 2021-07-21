@@ -33,9 +33,9 @@ export class EventResolver {
   ) {
     const event = new Event();
     event.name = createEventInput.name;
-    event.start_time = createEventInput.start_time;
-    event.end_time = createEventInput.end_time;
-    event.gcs_bucket = createEventInput.gcs_bucket;
+    event.startTime = createEventInput.startTime;
+    event.endTime = createEventInput.endTime;
+    event.gcsBucket = createEventInput.gcsBucket;
 
     return await event.save();
   }
@@ -52,14 +52,14 @@ export class EventResolver {
     if (updateEventInput.name) {
       event.name = updateEventInput.name;
     }
-    if (updateEventInput.start_time) {
-      event.start_time = updateEventInput.start_time;
+    if (updateEventInput.startTime) {
+      event.startTime = updateEventInput.startTime;
     }
-    if (updateEventInput.end_time) {
-      event.end_time = updateEventInput.start_time;
+    if (updateEventInput.endTime) {
+      event.endTime = updateEventInput.endTime;
     }
-    if (updateEventInput.gcs_bucket) {
-      event.gcs_bucket = updateEventInput.gcs_bucket;
+    if (updateEventInput.gcsBucket) {
+      event.gcsBucket = updateEventInput.gcsBucket;
     }
     return await event.save();
   }

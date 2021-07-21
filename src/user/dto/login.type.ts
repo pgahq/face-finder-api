@@ -6,8 +6,8 @@ export class LoginType {
   username: string;
 
   @Field(() => String)
-  access_token: string;
+  accessToken: string;
 
   @Field(() => String)
-  expired_in: string;
+  expiredIn: string;
 }
