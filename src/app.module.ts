@@ -4,7 +4,7 @@ import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 
-import { authConfig } from 'config';
+import { authConfig, graphqlConfig } from 'config';
 import { EventModule } from 'event/event.module';
 import { UserModule } from 'user/user.module';
 
@@ -12,7 +12,7 @@ import { UserModule } from 'user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [authConfig],
+      load: [authConfig, graphqlConfig],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async () =>
