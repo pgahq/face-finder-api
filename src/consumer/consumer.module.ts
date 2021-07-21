@@ -4,14 +4,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
+import { ConsumerJwtStrategy } from 'auth/strategies/consumer-jwt.strategy';
 
-import { User } from './entities/user.entity';
-import { UserResolver } from './user.resolver';
+import { ConsumerResolver } from './consumer.resolver';
+import { Consumer } from './entitites/consumer.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Consumer]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -24,7 +24,6 @@ import { UserResolver } from './user.resolver';
       inject: [ConfigService],
     }),
   ],
-
-  providers: [UserResolver, UserJwtStrategy],
+  providers: [ConsumerResolver, ConsumerJwtStrategy],
 })
-export class UserModule {}
+export class ConsumerModule {}

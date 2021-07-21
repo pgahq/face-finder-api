@@ -73,13 +73,11 @@ export class UserResolver {
   @Query(() => User)
   @UseGuards(GqlAuthGuard)
   async me(@CurrentUser() user: User) {
-    return await User.findOne(user.id);
+    return user;
   }
 
   @Mutation(() => LoginType)
-  public async login(
-    @Args('loginInput') loginInput: LoginInput,
-  ): Promise<LoginType> {
+  async login(@Args('loginInput') loginInput: LoginInput): Promise<LoginType> {
     const user = await User.findOne({ username: loginInput.username });
     if (user && (await bcrypt.compare(loginInput.password, user.password))) {
       return {
