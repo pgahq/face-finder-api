@@ -21,8 +21,14 @@ jobs:
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
+  update-helm-repo:
+    steps:
+      - add_ssh_keys
 
 workflows:
   commit:
     jobs:
       - build-and-push
+  update-helm-repo:
+    jobs:
+      - update-helm-repo
