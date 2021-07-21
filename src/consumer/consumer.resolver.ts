@@ -89,10 +89,4 @@ export class ConsumerResolver {
       expiresIn: this.configService.get<string>('auth.expiresIn'),
     };
   }
-
-  @Query(() => Consumer)
-  @UseGuards(GqlAuthGuard)
-  async cInfo(@CurrentUser() consumer: Consumer) {
-    return await Consumer.findOne(consumer.id);
-  }
 }

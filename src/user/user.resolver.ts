@@ -72,8 +72,8 @@ export class UserResolver {
 
   @Query(() => User)
   @UseGuards(GqlAuthGuard)
-  async uInfo(@CurrentUser() user: User) {
-    return await User.findOne(user.id);
+  async me(@CurrentUser() user: User) {
+    return user;
   }
 
   @Mutation(() => LoginType)
