@@ -37,7 +37,7 @@ import { UserModule } from 'user/user.module';
     UserModule,
     EventModule,
     ConsumerModule,
-  ],
+  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
