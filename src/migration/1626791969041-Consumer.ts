@@ -17,17 +17,17 @@ export class Consumer1626791969041 implements MigrationInterface {
                   type: 'varchar',
                 },
                 {
-                    name: 'selfie_uuid',
+                    name: 'selfieUuid',
                     type: 'varchar',
                     isNullable: true,
                 },
                 {
-                  name: 'created_at',
+                  name: 'createdAt',
                   type: 'timestamp',
                   isNullable: true,
                 },
                 {
-                  name: 'updated_at',
+                  name: 'updatedAt',
                   type: 'timestamp',
                   isNullable: true,
                 },

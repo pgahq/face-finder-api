@@ -1,13 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class LoginType {
+export class VerifyConsumerType {
   @Field(() => String)
-  username: string;
+  email: string;
 
   @Field(() => String)
   accessToken: string;
 
   @Field(() => String)
-  expiredIn: string;
+  expiresIn: string;
 }

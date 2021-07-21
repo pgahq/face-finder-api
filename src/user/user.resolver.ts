@@ -72,7 +72,7 @@ export class UserResolver {
 
   @Query(() => User)
   @UseGuards(GqlAuthGuard)
-  async me(@CurrentUser() user: User) {
+  async uInfo(@CurrentUser() user: User) {
     return await User.findOne(user.id);
   }
 
@@ -84,11 +84,11 @@ export class UserResolver {
     if (user && (await bcrypt.compare(loginInput.password, user.password))) {
       return {
         username: user.username,
-        access_token: this.jwtService.sign({
+        accessToken: this.jwtService.sign({
           username: user.username,
           sub: user.id,
         }),
-        expired_in: this.configService.get<string>('auth.expires_in'),
+        expiredIn: this.configService.get<string>('auth.expiresIn'),
       };
     }
     throw new UnauthorizedException();

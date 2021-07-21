@@ -21,24 +21,24 @@ export class Consumer extends BaseEntity {
 
   @Column({ type: 'varchar' })
   @Field({nullable: true})
-  selfie_uuid: string;
+  selfieUuid: string;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
-  created_at: Date;
+  createdAt: Date;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
-  updated_at: Date;
+  updatedAt: Date;
 
   @BeforeInsert()
   public setDate(): void {
-    this.created_at = new Date();
-    this.updated_at = new Date();
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
   }
 
   @BeforeUpdate()
   public setUpdateDate(): void {
-    this.updated_at = new Date();
+    this.updatedAt = new Date();
   }
 }

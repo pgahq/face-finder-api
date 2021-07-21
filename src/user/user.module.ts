@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { JwtStrategy } from 'auth/strategies/jwt.strategy';
+import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 
 import { User } from './entities/user.entity';
 import { UserResolver } from './user.resolver';
@@ -16,15 +16,15 @@ import { UserResolver } from './user.resolver';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('auth.jwt_secret'),
+        secret: configService.get<string>('auth.jwtSecret'),
         signOptions: {
-          expiresIn: configService.get<string>('auth.expires_in'),
+          expiresIn: configService.get<string>('auth.expiresIn'),
         },
       }),
       inject: [ConfigService],
     }),
   ],
 
-  providers: [UserResolver, JwtStrategy],
+  providers: [UserResolver, UserJwtStrategy],
 })
 export class UserModule {}

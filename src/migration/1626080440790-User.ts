@@ -20,12 +20,12 @@ export class User1626080440790 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'created_at',
+            name: 'createdAt',
             type: 'timestamp',
             isNullable: true,
           },
           {
-            name: 'updated_at',
+            name: 'updatedAt',
             type: 'timestamp',
             isNullable: true,
           },

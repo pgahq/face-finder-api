@@ -16,24 +16,25 @@ export class Event1626277247390 implements MigrationInterface {
             type: 'varchar',
           },
           {
-            name: 'start_time',
+            name: 'startTime',
             type: 'timestamp',
           },
           {
-            name: 'end_time',
+            name: 'endTime',
             type: 'timestamp',
           },
           {
-            name: 'gcs_bucket',
+            name: 'gcsBucket',
             type: 'varchar',
+            isNullable: true,
           },
           {
-            name: 'created_at',
+            name: 'createdAt',
             type: 'timestamp',
             isNullable: true,
           },
           {
-            name: 'updated_at',
+            name: 'updatedAt',
             type: 'timestamp',
             isNullable: true,
           },
@@ -45,6 +46,6 @@ export class Event1626277247390 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('user', true, true, true);
+    await queryRunner.dropTable('event', true, true, true);
   }
 }

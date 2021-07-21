@@ -25,20 +25,20 @@ export class User extends BaseEntity {
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
-  created_at: Date;
+  createdAt: Date;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
-  updated_at: Date;
+  updatedAt: Date;
 
   @BeforeInsert()
   public setDate(): void {
-    this.created_at = new Date();
-    this.updated_at = new Date();
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
   }
 
   @BeforeUpdate()
   public setUpdateDate(): void {
-    this.updated_at = new Date();
+    this.updatedAt = new Date();
   }
 }
