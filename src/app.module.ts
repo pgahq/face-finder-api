@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { getConnectionOptions } from 'typeorm';
 
-import { authConfig } from 'config';
+import { authConfig, comprefaceConfig } from 'config';
 import { ConsumerModule } from 'consumer/consumer.module';
 import { EventModule } from 'event/event.module';
 import { UserModule } from 'user/user.module';
@@ -14,7 +14,7 @@ import { UserModule } from 'user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [authConfig],
+      load: [authConfig, comprefaceConfig],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async () =>

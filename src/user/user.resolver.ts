@@ -11,10 +11,10 @@ import * as bcrypt from 'bcrypt';
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { GqlAuthGuard } from 'auth/guards/gpl-auth.guard';
 
-import { CreateUserInput } from 'user/dto/create-user.input';
-import { LoginInput } from 'user/dto/login.input';
-import { LoginType } from 'user/dto/login.type';
-import { UpdateUserInput } from 'user/dto/update-user.input';
+import { CreateUserInput } from './dto/create-user.input';
+import { LoginInput } from './dto/login.input';
+import { LoginType } from './dto/login.type';
+import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
 
 const saltOrRounds = 10;

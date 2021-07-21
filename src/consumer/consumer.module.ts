@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Consumer } from 'consumer/entitites/consumer.entity';
+import { Consumer } from './entitites/consumer.entity';
 
-import { ConsumerResolver } from 'consumer/consumer.resolver';
+import { ConsumerResolver } from './consumer.resolver';
 
 @Module({
   imports: [

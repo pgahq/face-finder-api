@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "@apollo/gateway": "^0.33.0",
-    "@exadel/compreface-js-sdk": "^0.5.2",
     "@nestjs/axios": "^0.0.1",
     "@nestjs/common": "^8.0.1",
     "@nestjs/config": "^1.0.0",
@@ -38,7 +37,6 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^8.6.0",
     "form-data": "^3.0.1",
-    "formdata-node": "^3.5.4",
     "graphql": "^15.5.1",
     "graphql-upload": "^12.0.0",
     "passport": "^0.4.1",
@@ -47,7 +45,6 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.0.0",
-    "stream-to-blob": "^2.0.1",
     "typeorm": "^0.2.34"
   },
   "devDependencies": {
