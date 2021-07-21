@@ -77,9 +77,7 @@ export class UserResolver {
   }
 
   @Mutation(() => LoginType)
-  async login(
-    @Args('loginInput') loginInput: LoginInput,
-  ): Promise<LoginType> {
+  async login(@Args('loginInput') loginInput: LoginInput): Promise<LoginType> {
     const user = await User.findOne({ username: loginInput.username });
     if (user && (await bcrypt.compare(loginInput.password, user.password))) {
       return {

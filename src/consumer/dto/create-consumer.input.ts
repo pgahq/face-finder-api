@@ -6,6 +6,6 @@ export class CreateConsumerInput {
   @Field(() => String)
   email: string;
 
-  @Field(() => GraphQLUpload) 
+  @Field(() => GraphQLUpload)
   image: FileUpload;
 }

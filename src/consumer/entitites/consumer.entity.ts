@@ -20,7 +20,7 @@ export class Consumer extends BaseEntity {
   email: string;
 
   @Column({ type: 'varchar' })
-  @Field({nullable: true})
+  @Field({ nullable: true })
   selfieUuid: string;
 
   @Column({ type: 'timestamp without time zone' })

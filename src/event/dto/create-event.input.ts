@@ -11,6 +11,6 @@ export class CreateEventInput {
   @Field(() => Date)
   endTime: Date;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   gcsBucket: string;
 }
