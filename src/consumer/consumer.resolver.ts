@@ -10,7 +10,7 @@ import { ConfigService } from '@nestjs/config';
 export class ConsumerResolver {
   constructor(private readonly configService: ConfigService) {}
   @Mutation(() => Consumer)
-  async createConsumer(
+  async verifyConsumer(
     @Args({ name: 'email', type: () => String }) email: string,
     @Args({ name: 'selfie', type: () => GraphQLUpload }) selfie: FileUpload
   ) {
