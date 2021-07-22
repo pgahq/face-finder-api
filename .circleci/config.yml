@@ -32,6 +32,6 @@ workflows:
   commit:
     jobs:
       - build-and-push
-  update-helm-repo:
-    jobs:
-      - update-helm-repo
+      - update-helm-repo:
+          requires:
+            - build-and-push
