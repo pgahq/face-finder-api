@@ -44,5 +44,10 @@ workflows:
     jobs:
       - build-and-push
       - update-helm-repo:
+          filters:
+            branches:
+              only: main
+            tags:
+              tags: /v\d+\.\d+\.\d+/
           requires:
             - build-and-push
