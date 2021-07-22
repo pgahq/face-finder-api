@@ -18,19 +18,36 @@ jobs:
           digest-path: /tmp/digest.txt
           image: pgahq/face-finder-api
           registry-url: us.gcr.io
+          tag: $CIRCLE_SHA1
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
   update-helm-repo:
-    docker: 
+    docker:
       - image: circleci/buildpack-deps
     steps:
       - add_ssh_keys
+      - run:
+          command: |
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            git clone git@github.com:pgahq/face-finder-charts.git
+            cd face-finder-charts
+            FILES=`find . -type f -print0 | xargs -0 grep -l "pgahq/face-finder-api"`
+            sudo apt-get update && sudo apt-get install -y gawk
+            gawk -i inplace "{ gsub(\"face-finder-318218/pgahq/face-finder-api:[^.]*$\", \"face-finder-318218/pgahq/face-finder-api:${CIRCLE_SHA1}\") }; { print }" $FILES
+            git config --global user.name "circleci"
+            git commit -am "update to face-finder-318218/pgahq/face-finder-api:${CIRCLE_SHA1}"
+            git push origin main
 
 workflows:
   commit:
     jobs:
       - build-and-push
-  update-helm-repo:
-    jobs:
-      - update-helm-repo
+      - update-helm-repo:
+          filters:
+            branches:
+              only: main
+            tags:
+              only: /v\d+\.\d+\.\d+/
+          requires:
+            - build-and-push
