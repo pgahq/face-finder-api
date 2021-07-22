@@ -4,10 +4,12 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { Consumer } from 'consumer/entitites/consumer.entity';
-import { User } from 'user/entities/user.entity';
 
 @Injectable()
-export class ConsumerJwtStrategy extends PassportStrategy(Strategy) {
+export class ConsumerJwtStrategy extends PassportStrategy(
+  Strategy,
+  'consumer-jwt',
+) {
   constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -21,7 +23,7 @@ export class ConsumerJwtStrategy extends PassportStrategy(Strategy) {
     sub: number;
   }): Promise<any> {
     const consumer = await Consumer.findOne(validationPayload.sub);
-    if (!consumer) {
+    if (!consumer || validationPayload.email !== consumer.email) {
       throw new UnauthorizedException();
     }
     return consumer;

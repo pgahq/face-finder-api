@@ -6,7 +6,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { User } from 'user/entities/user.entity';
 
 @Injectable()
-export class UserJwtStrategy extends PassportStrategy(Strategy) {
+export class UserJwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
   constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,7 +20,7 @@ export class UserJwtStrategy extends PassportStrategy(Strategy) {
     sub: number;
   }): Promise<any> {
     const user = await User.findOne(validationPayload.sub);
-    if (!user) {
+    if (!user || validationPayload.username !== user.username) {
       throw new UnauthorizedException();
     }
     return user;

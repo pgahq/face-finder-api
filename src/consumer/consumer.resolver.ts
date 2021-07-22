@@ -10,7 +10,7 @@ import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
-import { GqlAuthGuard } from 'auth/guards/gpl-auth.guard';
+import { ConsumerAuthGuard } from 'auth/guards/consumer-auth.guard';
 import { Consumer } from 'consumer/entitites/consumer.entity';
 import { ComprefaceService } from 'utils';
 
@@ -88,5 +88,11 @@ export class ConsumerResolver {
       }),
       expiresIn: this.configService.get<string>('auth.expiresIn'),
     };
+  }
+
+  @Query(() => Consumer)
+  @UseGuards(ConsumerAuthGuard)
+  async consumerInfo(@CurrentUser() consumer: Consumer) {
+    return consumer;
   }
 }
