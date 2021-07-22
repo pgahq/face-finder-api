@@ -18,11 +18,12 @@ jobs:
           digest-path: /tmp/digest.txt
           image: pgahq/face-finder-api
           registry-url: us.gcr.io
+          tag: $CIRCLE_SHA1
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
   update-helm-repo:
-    docker: 
+    docker:
       - image: circleci/buildpack-deps
     steps:
       - add_ssh_keys
