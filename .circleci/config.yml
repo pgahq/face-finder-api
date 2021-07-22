@@ -35,6 +35,7 @@ jobs:
             FILES=`find . -type f -print0 | xargs -0 grep -l "pgahq/face-finder-api"`
             sudo apt-get update && sudo apt-get install -y gawk
             gawk -i inplace "{ gsub(\"face-finder-318218/pgahq/face-finder-api:[^.]*$\", \"face-finder-318218/pgahq/face-finder-api:${CIRCLE_SHA1}\") }; { print }" $FILES
+            git config --global user.name "circleci"
             git commit -am "update to face-finder-318218/pgahq/face-finder-api:${CIRCLE_SHA1}"
             git push origin main
 
