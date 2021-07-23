@@ -10,7 +10,7 @@ import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
-import { ConsumerAuthGuard } from 'auth/guards/consumer.guard';
+import { ConsumerGuard } from 'auth/guards/consumer.guard';
 import { Consumer } from 'consumer/entitites/consumer.entity';
 import { ComprefaceService } from 'utils';
 
@@ -91,7 +91,7 @@ export class ConsumerResolver {
   }
 
   @Query(() => Consumer)
-  @UseGuards(ConsumerAuthGuard)
+  @UseGuards(ConsumerGuard)
   async consumerInfo(@CurrentUser() consumer: Consumer) {
     return consumer;
   }
