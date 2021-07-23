@@ -10,7 +10,7 @@ import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
-import { ConsumerAuthGuard } from 'auth/guards/consumer-auth.guard';
+import { ConsumerAuthGuard } from 'auth/guards/consumer.guard';
 import { Consumer } from 'consumer/entitites/consumer.entity';
 import { ComprefaceService } from 'utils';
 
