@@ -1,3 +1,4 @@
+import { BullModule } from '@nestjs/bull';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
@@ -31,6 +32,16 @@ import { UserModule } from 'user/user.module';
         introspection: configService.get<boolean>('graphql.introspection'),
         autoSchemaFile: true,
         uploads: false,
+      }),
+      inject: [ConfigService],
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('QUEUE_HOST'),
+          port: +configService.get('QUEUE_PORT'),
+        },
       }),
       inject: [ConfigService],
     }),

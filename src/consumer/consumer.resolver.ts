@@ -1,11 +1,14 @@
+import { InjectQueue } from '@nestjs/bull';
 import {
   BadRequestException,
+  InternalServerErrorException,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
+import { Queue } from 'bull';
 import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
@@ -21,6 +24,7 @@ export class ConsumerResolver {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    @InjectQueue('new-consumer') private readonly newConsumerQueue: Queue,
   ) {}
 
   @Mutation(() => VerifyConsumerType)
@@ -44,10 +48,11 @@ export class ConsumerResolver {
       // create new consumer and add example selfie for consumer
       consumer = new Consumer();
       consumer.email = email;
+      await consumer.save();
       try {
         const selfieUuid = await comprefaceService.addExample(
           formData,
-          email,
+          consumer.id,
           {},
         );
         consumer.selfieUuid = selfieUuid;
@@ -55,8 +60,10 @@ export class ConsumerResolver {
         throw new BadRequestException(error);
       }
       await consumer.save();
-    } else {
+      await this.newConsumerQueue.add('classify-photos', consumer);
+    } else if (consumer.selfieUuid) {
       // verify consumer with selfie input
+      console.log(consumer);
       let matching = false;
       try {
         const response = await comprefaceService.verify(
@@ -79,6 +86,8 @@ export class ConsumerResolver {
       if (!matching) {
         throw new UnauthorizedException('Your face is not matching');
       }
+    } else {
+      throw new InternalServerErrorException('no selfie input');
     }
     return {
       email: consumer.email,
