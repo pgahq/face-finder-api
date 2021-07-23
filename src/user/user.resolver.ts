@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
-import { GqlAuthGuard } from 'auth/guards/gpl-auth.guard';
+import { UserGuard } from 'auth/guards/user.guard';
 
 import { CreateUserInput } from './dto/create-user.input';
 import { LoginInput } from './dto/login.input';
@@ -71,7 +71,7 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  @UseGuards(GqlAuthGuard)
+  @UseGuards(UserGuard)
   async me(@CurrentUser() user: User) {
     return user;
   }
