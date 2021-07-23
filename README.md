@@ -26,10 +26,44 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Prerequisites
+- nodejs 16.3.0 (use `asdf` to manage)
+- postgres 13
+
 ## Installation
 
 ```bash
 $ npm install
+```
+
+## Setup environment 
+1. Postgres
+- Run postgres locally 
+- Create database `main` 
+OR 
+- Run postgres by docker-compose 
+  - Ensure that postgresql is not running on your machine)
+  - Installation: https://docs.docker.com/compose/install/
+  - Database is already created when docker-compose is up
+```bash
+$ docker-compose up --build -d
+```
+2. Compreface
+- Follow https://github.com/exadel-inc/CompreFace/blob/master/docs/How-to-Use-CompreFace.md to run your compreface locally
+- Ensure that compreface is already to connect
+3. ENV
+- Copy environment example file 
+```base
+$ cp .envrc.example .envrc
+```
+- Update if any custom changes
+- You can install `direnv` to easily manage ENV https://direnv.net/docs/installation.html
+```bash
+$ direnv allow
+``` 
+- OR You can source environment
+```bash
+$ source .envrc
 ```
 
 ## Running the app
