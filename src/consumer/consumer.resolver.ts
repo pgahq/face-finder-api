@@ -2,11 +2,12 @@ import { InjectQueue } from '@nestjs/bull';
 import {
   BadRequestException,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { Queue } from 'bull';
 import * as FormData from 'form-data';
@@ -15,6 +16,9 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { ConsumerGuard } from 'auth/guards/consumer.guard';
 import { Consumer } from 'consumer/entitites/consumer.entity';
+import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
+import { Event } from 'consumer/entitites/event.entity';
+import { queueConstants } from 'consumer/queue.constant';
 import { ComprefaceService } from 'utils';
 
 import { VerifyConsumerType } from './dto/verify-consumer.type';
@@ -24,7 +28,8 @@ export class ConsumerResolver {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    @InjectQueue('new-consumer') private readonly newConsumerQueue: Queue,
+    @InjectQueue(queueConstants.newConsumer)
+    private readonly newConsumerQueue: Queue,
   ) {}
 
   @Mutation(() => VerifyConsumerType)
@@ -73,9 +78,10 @@ export class ConsumerResolver {
         );
         if (Array.isArray(response) && response.length >= 1) {
           const matchSubject = response[0];
+          console.log(matchSubject);
           if (
             matchSubject.similarity >=
-            this.configService.get('compreface.similarityThreshold')
+            this.configService.get('compreface.singleSimilarityThreshold')
           ) {
             matching = true;
           }
@@ -99,9 +105,18 @@ export class ConsumerResolver {
     };
   }
 
-  @Query(() => Consumer)
+  @Query(() => [ConsumerPhoto])
   @UseGuards(ConsumerGuard)
-  async consumerInfo(@CurrentUser() consumer: Consumer) {
-    return consumer;
+  async myPhotosInEvent(
+    @CurrentUser() consumer: Consumer,
+    @Args('eventId', { type: () => Int }) eventId: number,
+  ) {
+    const event = Event.findOne(eventId);
+    if (event) {
+      return consumer.consumerPhoto.filter(
+        (cPhoto) => cPhoto.photo.event.id === eventId,
+      );
+    }
+    throw new NotFoundException('event not found');
   }
 }

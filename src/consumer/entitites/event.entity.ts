@@ -5,8 +5,11 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Photo } from 'consumer/entitites/photo.entity';
 
 @ObjectType()
 @Entity()
@@ -49,4 +52,7 @@ export class Event extends BaseEntity {
   public setUpdateDate(): void {
     this.updatedAt = new Date();
   }
+
+  @OneToMany(() => Photo, (photo) => photo.event, { cascade: true })
+  photos: Photo[];
 }

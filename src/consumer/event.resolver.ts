@@ -5,7 +5,7 @@ import { UserGuard } from 'auth/guards/user.guard';
 
 import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
-import { Event } from './entities/event.entity';
+import { Event } from './entitites/event.entity';
 
 @Resolver(() => Event)
 export class EventResolver {
@@ -68,6 +68,9 @@ export class EventResolver {
   @UseGuards(UserGuard)
   async removeEvent(@Args('id', { type: () => Int }) id: number) {
     const event = await Event.findOne(id);
-    return await event.remove();
+    if (event) {
+      return await event.remove();
+    }
+    throw new NotFoundException();
   }
 }
