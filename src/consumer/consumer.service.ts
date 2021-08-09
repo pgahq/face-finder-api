@@ -15,9 +15,10 @@ export class ConsumerService {
   constructor(private readonly configService: ConfigService) {}
 
   private readonly storage = new Storage({
-    projectId: this.configService.get<string>('googleStorage.projectId'),
-    keyFilename: this.configService.get<string>('googleStorage.keyFilename'),
-  });
+    projectId: this.configService.get<string>('googleCloud.projectId'),
+    credentials: this.configService.get<Record<string, unknown>>('googleCloud.credentials')
+  })
+
   private readonly comprefaceService = new ComprefaceService(
     this.configService.get<string>('compreface.host'),
     this.configService.get<string>('compreface.apiKey'),
@@ -36,7 +37,7 @@ export class ConsumerService {
 
       for (const event of events) {
         const [files] = await this.storage
-          .bucket(this.configService.get<string>('googleStorage.galleryBucket'))
+          .bucket(this.configService.get<string>('googleCloud.storageGalleryBucket'))
           .getFiles({ prefix: event.gcsBucket });
 
         for (const file of files) {

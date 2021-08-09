@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 
-export default registerAs('googleStorage', () => ({
-  projectId: process.env.GOOGLE_STORAGE_PROJECT_ID,
-  keyFilename: process.env.GOOGLE_STORAGE_KEY_FILENAME,
-  galleryBucket: process.env.GOOGLE_STORAGE_GALLERY_BUCKET,
+export default registerAs('googleCloud', () => ({
+  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
+  storageGalleryBucket: process.env.GOOGLE_CLOUD_STORAGE_GALLERY_BUCKET,
+  credentials: JSON.parse(process.env.GOOGLE_CLOUD_CREDENTIALS),
 }));
