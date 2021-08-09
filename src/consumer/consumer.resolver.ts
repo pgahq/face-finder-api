@@ -18,7 +18,7 @@ import { ConsumerGuard } from 'auth/guards/consumer.guard';
 import { Consumer } from 'consumer/entitites/consumer.entity';
 import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
 import { Event } from 'consumer/entitites/event.entity';
-import { queueConstants } from 'consumer/queue.constant';
+import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 import { ComprefaceService } from 'utils';
 
 import { VerifyConsumerType } from './dto/verify-consumer.type';
@@ -28,7 +28,7 @@ export class ConsumerResolver {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
-    @InjectQueue(queueConstants.newConsumer)
+    @InjectQueue(newConsumerQueueConstants.name)
     private readonly newConsumerQueue: Queue,
   ) {}
 
@@ -65,10 +65,9 @@ export class ConsumerResolver {
         throw new BadRequestException(error);
       }
       await consumer.save();
-      await this.newConsumerQueue.add('classify-photos', consumer);
+      await this.newConsumerQueue.add(newConsumerQueueConstants.handler, consumer);
     } else if (consumer.selfieUuid) {
       // verify consumer with selfie input
-      console.log(consumer);
       let matching = false;
       try {
         const response = await comprefaceService.verify(

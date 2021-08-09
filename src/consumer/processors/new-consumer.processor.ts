@@ -10,9 +10,9 @@ import { Job } from 'bull';
 
 import { ConsumerService } from 'consumer/consumer.service';
 import { Consumer } from 'consumer/entitites/consumer.entity';
-import { queueConstants } from 'consumer/queue.constant';
+import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 
-@Processor(queueConstants.newConsumer)
+@Processor(newConsumerQueueConstants.name)
 export class NewConsumerProcessor {
   private readonly logger = new Logger(NewConsumerProcessor.name);
   constructor(private readonly consumerService: ConsumerService) {}
@@ -41,7 +41,7 @@ export class NewConsumerProcessor {
     );
   }
 
-  @Process('classify-photos')
+  @Process(newConsumerQueueConstants.handler)
   async handleClassifyPhotos(job: Job<Consumer>) {
     const newConsumer = job.data;
     await this.consumerService.classifyPhotosByConsumer(newConsumer);

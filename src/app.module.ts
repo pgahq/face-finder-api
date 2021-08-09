@@ -44,7 +44,7 @@ import { UserModule } from 'user/user.module';
       useFactory: async (configService: ConfigService) => ({
         redis: {
           host: configService.get('QUEUE_HOST'),
-          port: +configService.get('QUEUE_PORT'),
+          port: parseInt(configService.get('QUEUE_PORT')),
         },
       }),
       inject: [ConfigService],

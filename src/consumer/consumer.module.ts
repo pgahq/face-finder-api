@@ -13,7 +13,7 @@ import { Event } from 'consumer/entitites/event.entity';
 import { Photo } from 'consumer/entitites/photo.entity';
 import { EventResolver } from 'consumer/event.resolver';
 import { NewConsumerProcessor } from 'consumer/processors/new-consumer.processor';
-import { queueConstants } from 'consumer/queue.constant';
+import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 
 import { ConsumerResolver } from './consumer.resolver';
 import { Consumer } from './entitites/consumer.entity';
@@ -33,7 +33,7 @@ import { Consumer } from './entitites/consumer.entity';
       inject: [ConfigService],
     }),
     BullModule.registerQueue({
-      name: queueConstants.newConsumer,
+      name: newConsumerQueueConstants.name,
     }),
   ],
   providers: [
