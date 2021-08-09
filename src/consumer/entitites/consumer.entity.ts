@@ -5,8 +5,11 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
 
 @ObjectType()
 @Entity()
@@ -41,4 +44,10 @@ export class Consumer extends BaseEntity {
   public setUpdateDate(): void {
     this.updatedAt = new Date();
   }
+
+  @OneToMany(() => ConsumerPhoto, (consumerPhoto) => consumerPhoto.consumer, {
+    cascade: true,
+    eager: true,
+  })
+  consumerPhoto: ConsumerPhoto[];
 }

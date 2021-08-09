@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as FormData from 'form-data';
 
 export class ComprefaceService {
   private host: string;
@@ -14,14 +15,18 @@ export class ComprefaceService {
     return `${this.host}/${this.baseUrl}`;
   }
 
-  formDataHeader(bodyFormData) {
+  formDataHeader(bodyFormData: FormData) {
     const headers = bodyFormData.getHeaders();
     headers['x-api-key'] = this.apiKey;
     return headers;
   }
 
-  async addExample(bodyFormData, subject, options): Promise<string> {
-    let params = { subject: subject };
+  async addExample(
+    bodyFormData: FormData,
+    subjectId: number,
+    options: any,
+  ): Promise<string> {
+    let params = { subject: subjectId };
     params = { ...params, ...options };
     return new Promise(async (resolve, reject) => {
       try {
@@ -36,7 +41,11 @@ export class ComprefaceService {
     });
   }
 
-  async verify(bodyFormData, imageId, options): Promise<any> {
+  async verify(
+    bodyFormData: FormData,
+    imageId: string,
+    options: any,
+  ): Promise<any> {
     const url = `${this.fullUrl()}/${imageId}/verify`;
     return new Promise(async (resolve, reject) => {
       try {
@@ -46,7 +55,7 @@ export class ComprefaceService {
         });
         resolve(response.data.result);
       } catch (error) {
-        reject(error.response.data.message);
+        reject(error.response);
       }
     });
   }

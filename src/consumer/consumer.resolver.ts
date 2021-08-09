@@ -1,17 +1,24 @@
+import { InjectQueue } from '@nestjs/bull';
 import {
   BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
+import { Queue } from 'bull';
 import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { ConsumerGuard } from 'auth/guards/consumer.guard';
 import { Consumer } from 'consumer/entitites/consumer.entity';
+import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
+import { Event } from 'consumer/entitites/event.entity';
+import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 import { ComprefaceService } from 'utils';
 
 import { VerifyConsumerType } from './dto/verify-consumer.type';
@@ -21,6 +28,8 @@ export class ConsumerResolver {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    @InjectQueue(newConsumerQueueConstants.name)
+    private readonly newConsumerQueue: Queue,
   ) {}
 
   @Mutation(() => VerifyConsumerType)
@@ -44,10 +53,11 @@ export class ConsumerResolver {
       // create new consumer and add example selfie for consumer
       consumer = new Consumer();
       consumer.email = email;
+      await consumer.save();
       try {
         const selfieUuid = await comprefaceService.addExample(
           formData,
-          email,
+          consumer.id,
           {},
         );
         consumer.selfieUuid = selfieUuid;
@@ -55,7 +65,8 @@ export class ConsumerResolver {
         throw new BadRequestException(error);
       }
       await consumer.save();
-    } else {
+      await this.newConsumerQueue.add(newConsumerQueueConstants.handler, consumer);
+    } else if (consumer.selfieUuid) {
       // verify consumer with selfie input
       let matching = false;
       try {
@@ -66,9 +77,10 @@ export class ConsumerResolver {
         );
         if (Array.isArray(response) && response.length >= 1) {
           const matchSubject = response[0];
+          console.log(matchSubject);
           if (
             matchSubject.similarity >=
-            this.configService.get('compreface.similarityThreshold')
+            this.configService.get('compreface.singleSimilarityThreshold')
           ) {
             matching = true;
           }
@@ -79,6 +91,8 @@ export class ConsumerResolver {
       if (!matching) {
         throw new UnauthorizedException('Your face is not matching');
       }
+    } else {
+      throw new InternalServerErrorException('no selfie input');
     }
     return {
       email: consumer.email,
@@ -90,9 +104,18 @@ export class ConsumerResolver {
     };
   }
 
-  @Query(() => Consumer)
+  @Query(() => [ConsumerPhoto])
   @UseGuards(ConsumerGuard)
-  async consumerInfo(@CurrentUser() consumer: Consumer) {
-    return consumer;
+  async myPhotosInEvent(
+    @CurrentUser() consumer: Consumer,
+    @Args('eventId', { type: () => Int }) eventId: number,
+  ) {
+    const event = Event.findOne(eventId);
+    if (event) {
+      return consumer.consumerPhoto.filter(
+        (cPhoto) => cPhoto.photo.event.id === eventId,
+      );
+    }
+    throw new NotFoundException('event not found');
   }
 }
