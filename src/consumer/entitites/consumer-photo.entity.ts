@@ -18,11 +18,9 @@ export class ConsumerPhoto extends BaseEntity {
   id: number;
 
   @Column({ type: 'int' })
-  @Field(() => Int)
   consumerId: number;
 
   @Column({ type: 'int' })
-  @Field(() => Int)
   photoId: number;
 
   @Column({ type: 'float' })
@@ -46,8 +44,10 @@ export class ConsumerPhoto extends BaseEntity {
   boxYMin: number;
 
   @ManyToOne(() => Photo, (photo) => photo.consumerPhoto, { eager: true })
+  @Field(() => Photo)
   photo: Photo;
 
-  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhoto)
+  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhoto, {eager: true})
+  @Field(() => Consumer)
   consumer: Consumer;
 }

@@ -47,7 +47,6 @@ export class Consumer extends BaseEntity {
 
   @OneToMany(() => ConsumerPhoto, (consumerPhoto) => consumerPhoto.consumer, {
     cascade: true,
-    eager: true,
   })
   consumerPhoto: ConsumerPhoto[];
 }
