@@ -29,6 +29,7 @@
 ## Prerequisites
 - nodejs 16.3.0 (use `asdf` to manage)
 - postgres 13
+- redis
 
 ## Installation
 
