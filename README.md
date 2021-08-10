@@ -52,7 +52,19 @@ $ docker-compose up --build -d
 2. Compreface
 - Follow https://github.com/exadel-inc/CompreFace/blob/master/docs/How-to-Use-CompreFace.md to run your compreface locally
 - Ensure that compreface is already to connect
-3. ENV
+3. Get a service account credentials for cloud storage access 
+https://console.cloud.google.com/iam-admin/serviceaccounts/details/100521807341988917149/keys?authuser=1&hl=EN&project=face-finder-318218
+- Try to add a new key, and download in Json file
+- Add content of the key file to `.envrc` like:
+```
+export GOOGLE_CLOUD_CREDENTIALS='{
+  "type": "service_account",
+  "project_id": "...",
+  "private_key_id": "...",
+  ...
+}'
+```
+5. ENV
 - Copy environment example file 
 ```base
 $ cp .envrc.example .envrc
