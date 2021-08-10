@@ -22,6 +22,7 @@ import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant'
 import { ComprefaceService } from 'utils';
 
 import { VerifyConsumerType } from './dto/verify-consumer.type';
+import { UserGuard } from 'auth/guards/user.guard';
 
 @Resolver()
 export class ConsumerResolver {
@@ -54,6 +55,8 @@ export class ConsumerResolver {
       consumer = new Consumer();
       consumer.email = email;
       await consumer.save();
+    }
+    if (!consumer.selfieUuid) {
       try {
         const selfieUuid = await comprefaceService.addExample(
           formData,
@@ -66,7 +69,7 @@ export class ConsumerResolver {
       }
       await consumer.save();
       await this.newConsumerQueue.add(newConsumerQueueConstants.handler, consumer);
-    } else if (consumer.selfieUuid) {
+    } else {
       // verify consumer with selfie input
       let matching = false;
       try {
@@ -91,8 +94,6 @@ export class ConsumerResolver {
       if (!matching) {
         throw new UnauthorizedException('Your face is not matching');
       }
-    } else {
-      throw new InternalServerErrorException('no selfie input');
     }
     return {
       email: consumer.email,
@@ -112,10 +113,17 @@ export class ConsumerResolver {
   ) {
     const event = Event.findOne(eventId);
     if (event) {
-      return consumer.consumerPhoto.filter(
+      let consumerPhotos = await ConsumerPhoto.find({consumerId: consumer.id})
+      return consumerPhotos.filter(
         (cPhoto) => cPhoto.photo.event.id === eventId,
       );
     }
     throw new NotFoundException('event not found');
+  }
+
+  @Query(() => [Consumer]) 
+  @UseGuards(UserGuard) 
+  async consumers() {
+    return await Consumer.find()
   }
 }
