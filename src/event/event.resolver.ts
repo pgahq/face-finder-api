@@ -5,7 +5,7 @@ import { UserGuard } from 'auth/guards/user.guard';
 
 import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
-import { Event } from './entitites/event.entity';
+import { Event } from './entities/event.entity';
 
 @Resolver(() => Event)
 export class EventResolver {

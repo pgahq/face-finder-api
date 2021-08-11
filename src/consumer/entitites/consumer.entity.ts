@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
+import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 
 @ObjectType()
 @Entity()

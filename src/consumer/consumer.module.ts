@@ -8,15 +8,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConsumerJwtStrategy } from 'auth/strategies/consumer-jwt.strategy';
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { ConsumerService } from 'consumer/consumer.service';
-import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
-import { Event } from 'consumer/entitites/event.entity';
-import { Photo } from 'consumer/entitites/photo.entity';
-import { EventResolver } from 'consumer/event.resolver';
+import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
+import { Event } from 'event/entities/event.entity';
+import { Photo } from 'photo/entities/photo.entity';
 import { NewConsumerProcessor } from 'consumer/processors/new-consumer.processor';
 import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 
 import { ConsumerResolver } from './consumer.resolver';
 import { Consumer } from './entitites/consumer.entity';
+import { EventModule } from 'event/event.module';
 
 @Module({
   imports: [
@@ -41,7 +41,6 @@ import { Consumer } from './entitites/consumer.entity';
     ConsumerService,
     ConsumerJwtStrategy,
     NewConsumerProcessor,
-    EventResolver,
     UserJwtStrategy,
   ],
 })

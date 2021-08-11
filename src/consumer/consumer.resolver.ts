@@ -16,8 +16,8 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { ConsumerGuard } from 'auth/guards/consumer.guard';
 import { Consumer } from 'consumer/entitites/consumer.entity';
-import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
-import { Event } from 'consumer/entitites/event.entity';
+import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity'
+import { Event } from 'event/entities/event.entity';
 import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 import { ComprefaceService } from 'utils';
 

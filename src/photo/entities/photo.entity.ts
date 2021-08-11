@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
-import { Event } from 'consumer/entitites/event.entity';
+import { ConsumerPhoto } from './consumer-photo.entity';
+import { Event } from 'event/entities/event.entity';
 
 @ObjectType()
 @Entity()

@@ -1,4 +1,4 @@
-import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import {
   BaseEntity,
   Column,
@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import { Consumer } from 'consumer/entitites/consumer.entity';
-import { Photo } from 'consumer/entitites/photo.entity';
+import { Photo } from './photo.entity';
 
 @ObjectType()
 @Entity('consumerPhoto')
