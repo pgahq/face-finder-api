@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Consumer } from 'consumer/entitites/consumer.entity';
+import { Consumer } from 'consumer/entities/consumer.entity';
 import { Photo } from './photo.entity';
 
 @ObjectType()

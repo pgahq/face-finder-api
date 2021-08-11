@@ -15,7 +15,7 @@ import { NewConsumerProcessor } from 'consumer/processors/new-consumer.processor
 import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 
 import { ConsumerResolver } from './consumer.resolver';
-import { Consumer } from './entitites/consumer.entity';
+import { Consumer } from './entities/consumer.entity';
 import { EventModule } from 'event/event.module';
 
 @Module({

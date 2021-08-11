@@ -9,7 +9,7 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
 import { ConsumerService } from 'consumer/consumer.service';
-import { Consumer } from 'consumer/entitites/consumer.entity';
+import { Consumer } from 'consumer/entities/consumer.entity';
 import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 
 @Processor(newConsumerQueueConstants.name)
