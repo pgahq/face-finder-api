@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { Consumer } from 'consumer/entities/consumer.entity';
+
 import { Photo } from './photo.entity';
 
 @ObjectType()
@@ -47,7 +48,9 @@ export class ConsumerPhoto extends BaseEntity {
   @Field(() => Photo)
   photo: Photo;
 
-  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhoto, {eager: true})
+  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhoto, {
+    eager: true,
+  })
   @Field(() => Consumer)
   consumer: Consumer;
 }

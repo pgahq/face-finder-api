@@ -14,6 +14,7 @@ import {
 } from 'config';
 import { ConsumerModule } from 'consumer/consumer.module';
 import { UserModule } from 'user/user.module';
+
 import { EventModule } from './event/event.module';
 import { PhotoModule } from './photo/photo.module';
 
