@@ -5,9 +5,10 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
-import { Event } from 'event/entities/event.entity';
-import { EventResolver } from 'event/event.resolver';
 import { Photo } from 'photo/entities/photo.entity';
+
+import { Event } from './entities/event.entity';
+import { EventResolver } from './event.resolver';
 
 @Module({
   imports: [

@@ -15,13 +15,13 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { ConsumerGuard } from 'auth/guards/consumer.guard';
 import { UserGuard } from 'auth/guards/user.guard';
-import { Consumer } from 'consumer/entities/consumer.entity';
 import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { ComprefaceService } from 'utils';
 
 import { VerifyConsumerType } from './dto/verify-consumer.type';
+import { Consumer } from './entities/consumer.entity';
 
 @Resolver()
 export class ConsumerResolver {

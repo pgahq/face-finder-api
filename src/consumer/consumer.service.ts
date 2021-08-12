@@ -4,11 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import * as FormData from 'form-data';
 import { getConnection } from 'typeorm';
 
-import { Consumer } from 'consumer/entities/consumer.entity';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { Photo } from 'photo/entities/photo.entity';
 import { ComprefaceService } from 'utils';
+
+import { Consumer } from './entities/consumer.entity';
 
 @Injectable()
 export class ConsumerService {
