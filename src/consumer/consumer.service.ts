@@ -4,11 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import * as FormData from 'form-data';
 import { getConnection } from 'typeorm';
 
-import { Consumer } from 'consumer/entitites/consumer.entity';
-import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
-import { Event } from 'consumer/entitites/event.entity';
-import { Photo } from 'consumer/entitites/photo.entity';
+import { Event } from 'event/entities/event.entity';
+import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
+import { Photo } from 'photo/entities/photo.entity';
 import { ComprefaceService } from 'utils';
+
+import { Consumer } from './entities/consumer.entity';
 
 @Injectable()
 export class ConsumerService {
@@ -16,8 +17,10 @@ export class ConsumerService {
 
   private readonly storage = new Storage({
     projectId: this.configService.get<string>('googleCloud.projectId'),
-    credentials: this.configService.get<Record<string, unknown>>('googleCloud.credentials')
-  })
+    credentials: this.configService.get<Record<string, unknown>>(
+      'googleCloud.credentials',
+    ),
+  });
 
   private readonly comprefaceService = new ComprefaceService(
     this.configService.get<string>('compreface.host'),
@@ -37,7 +40,9 @@ export class ConsumerService {
 
       for (const event of events) {
         const [files] = await this.storage
-          .bucket(this.configService.get<string>('googleCloud.storageGalleryBucket'))
+          .bucket(
+            this.configService.get<string>('googleCloud.storageGalleryBucket'),
+          )
           .getFiles({ prefix: event.gcsBucket });
 
         for (const file of files) {

@@ -8,9 +8,9 @@ import {
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 
-import { ConsumerService } from 'consumer/consumer.service';
-import { Consumer } from 'consumer/entitites/consumer.entity';
-import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
+import { ConsumerService } from '../consumer.service';
+import { Consumer } from '../entities/consumer.entity';
+import { newConsumerQueueConstants } from '../new-consumer-queue.constant';
 
 @Processor(newConsumerQueueConstants.name)
 export class NewConsumerProcessor {

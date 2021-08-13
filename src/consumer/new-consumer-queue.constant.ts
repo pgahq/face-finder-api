@@ -1,4 +1,4 @@
 export const newConsumerQueueConstants = {
   name: 'newConsumer',
-  handler: 'classifyPhotos'
+  handler: 'classifyPhotos',
 };

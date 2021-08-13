@@ -1,4 +1,4 @@
-import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
 import {
   BaseEntity,
   Column,
@@ -7,8 +7,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Consumer } from 'consumer/entitites/consumer.entity';
-import { Photo } from 'consumer/entitites/photo.entity';
+import { Consumer } from 'consumer/entities/consumer.entity';
+
+import { Photo } from './photo.entity';
 
 @ObjectType()
 @Entity('consumerPhoto')
@@ -47,7 +48,9 @@ export class ConsumerPhoto extends BaseEntity {
   @Field(() => Photo)
   photo: Photo;
 
-  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhoto, {eager: true})
+  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhoto, {
+    eager: true,
+  })
   @Field(() => Consumer)
   consumer: Consumer;
 }

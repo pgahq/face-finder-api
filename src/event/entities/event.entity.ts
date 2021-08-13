@@ -9,22 +9,30 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
+import { Photo } from 'photo/entities/photo.entity';
 
 @ObjectType()
 @Entity()
-export class Consumer extends BaseEntity {
+export class Event extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: number;
 
   @Column({ type: 'varchar' })
   @Field(() => String)
-  email: string;
+  name: string;
+
+  @Column({ type: 'timestamp without time zone' })
+  @Field(() => Date)
+  startTime: Date;
+
+  @Column({ type: 'timestamp without time zone' })
+  @Field(() => Date)
+  endTime: Date;
 
   @Column({ type: 'varchar' })
   @Field({ nullable: true })
-  selfieUuid: string;
+  gcsBucket: string;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
@@ -45,8 +53,6 @@ export class Consumer extends BaseEntity {
     this.updatedAt = new Date();
   }
 
-  @OneToMany(() => ConsumerPhoto, (consumerPhoto) => consumerPhoto.consumer, {
-    cascade: true,
-  })
-  consumerPhoto: ConsumerPhoto[];
+  @OneToMany(() => Photo, (photo) => photo.event, { cascade: true })
+  photos: Photo[];
 }

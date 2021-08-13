@@ -1,7 +1,6 @@
 import { InjectQueue } from '@nestjs/bull';
 import {
   BadRequestException,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
   UseGuards,
@@ -15,14 +14,14 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { ConsumerGuard } from 'auth/guards/consumer.guard';
-import { Consumer } from 'consumer/entitites/consumer.entity';
-import { ConsumerPhoto } from 'consumer/entitites/consumer-photo.entity';
-import { Event } from 'consumer/entitites/event.entity';
+import { UserGuard } from 'auth/guards/user.guard';
 import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
+import { Event } from 'event/entities/event.entity';
+import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { ComprefaceService } from 'utils';
 
 import { VerifyConsumerType } from './dto/verify-consumer.type';
-import { UserGuard } from 'auth/guards/user.guard';
+import { Consumer } from './entities/consumer.entity';
 
 @Resolver()
 export class ConsumerResolver {
@@ -68,7 +67,10 @@ export class ConsumerResolver {
         throw new BadRequestException(error);
       }
       await consumer.save();
-      await this.newConsumerQueue.add(newConsumerQueueConstants.handler, consumer);
+      await this.newConsumerQueue.add(
+        newConsumerQueueConstants.handler,
+        consumer,
+      );
     } else {
       // verify consumer with selfie input
       let matching = false;
@@ -113,7 +115,9 @@ export class ConsumerResolver {
   ) {
     const event = Event.findOne(eventId);
     if (event) {
-      let consumerPhotos = await ConsumerPhoto.find({consumerId: consumer.id})
+      const consumerPhotos = await ConsumerPhoto.find({
+        consumerId: consumer.id,
+      });
       return consumerPhotos.filter(
         (cPhoto) => cPhoto.photo.event.id === eventId,
       );
@@ -121,9 +125,9 @@ export class ConsumerResolver {
     throw new NotFoundException('event not found');
   }
 
-  @Query(() => [Consumer]) 
-  @UseGuards(UserGuard) 
+  @Query(() => [Consumer])
+  @UseGuards(UserGuard)
   async consumers() {
-    return await Consumer.find()
+    return await Consumer.find();
   }
 }
