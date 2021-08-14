@@ -5,16 +5,15 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
-import { EventPartner } from 'partner/entities/event-partner.entity';
-import { Photo } from 'photo/entities/photo.entity';
+import { Event } from 'event/entities/event.entity';
 
-import { Partner } from '../partner/entities/partner.entity';
-import { Event } from './entities/event.entity';
-import { EventResolver } from './event.resolver';
+import { EventPartner } from './entities/event-partner.entity';
+import { Partner } from './entities/partner.entity';
+import { PartnerResolver } from './partner.resolver';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Photo, Event, EventPartner, Partner]),
+    TypeOrmModule.forFeature([Event, Partner, EventPartner]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -27,6 +26,6 @@ import { EventResolver } from './event.resolver';
       inject: [ConfigService],
     }),
   ],
-  providers: [EventResolver, UserJwtStrategy],
+  providers: [UserJwtStrategy, PartnerResolver],
 })
-export class EventModule {}
+export class PartnerModule {}

@@ -23,8 +23,8 @@ export class Photo extends BaseEntity {
   @Field(() => String)
   filename: string;
 
-  @OneToMany(() => ConsumerPhoto, (consumerPhoto) => consumerPhoto.photo)
-  consumerPhoto: ConsumerPhoto[];
+  @OneToMany(() => ConsumerPhoto, (consumerPhotos) => consumerPhotos.photo)
+  consumerPhotos: ConsumerPhoto[];
 
   @ManyToOne(() => Event, (event) => event.photos, { eager: true })
   event: Event;

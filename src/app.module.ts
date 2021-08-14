@@ -17,6 +17,8 @@ import { EventModule } from 'event/event.module';
 import { PhotoModule } from 'photo/photo.module';
 import { UserModule } from 'user/user.module';
 
+import { PartnerModule } from './partner/partner.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -55,6 +57,7 @@ import { UserModule } from 'user/user.module';
     ConsumerModule,
     EventModule,
     PhotoModule,
+    PartnerModule,
   ],
 })
 export class AppModule implements NestModule {
