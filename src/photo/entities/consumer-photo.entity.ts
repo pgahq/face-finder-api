@@ -44,13 +44,13 @@ export class ConsumerPhoto extends BaseEntity {
   @Field(() => Float)
   boxYMin: number;
 
-  @ManyToOne(() => Photo, (photo) => photo.consumerPhoto, { eager: true })
+  @ManyToOne(() => Photo, (photo) => photo.consumerPhotos)
   @Field(() => Photo)
-  photo: Photo;
+  photo: Promise<Photo>;
 
-  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhoto, {
+  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhotos, {
     eager: true,
   })
   @Field(() => Consumer)
-  consumer: Consumer;
+  consumer: Promise<Consumer>;
 }

@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { EventPartner } from 'partner/entities/event-partner.entity';
 import { Photo } from 'photo/entities/photo.entity';
 
 @ObjectType()
@@ -55,4 +56,10 @@ export class Event extends BaseEntity {
 
   @OneToMany(() => Photo, (photo) => photo.event, { cascade: true })
   photos: Photo[];
+
+  @OneToMany(() => EventPartner, (eventPartners) => eventPartners.event, {
+    cascade: true,
+  })
+  @Field(() => [EventPartner])
+  eventPartners: Promise<EventPartner[]>;
 }

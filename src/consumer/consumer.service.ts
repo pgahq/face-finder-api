@@ -75,8 +75,8 @@ export class ConsumerService {
                 await queryRunner.manager.save(Photo, photo);
               }
               const consumerPhoto = new ConsumerPhoto();
-              consumerPhoto.consumer = consumer;
-              consumerPhoto.photo = photo;
+              consumerPhoto.consumer = Promise.resolve(consumer);
+              consumerPhoto.photo = Promise.resolve(photo);
               consumerPhoto.similarity = mostSimilar.similarity;
               consumerPhoto.boxXMin = mostSimilar.box.x_min;
               consumerPhoto.boxXMax = mostSimilar.box.x_max;

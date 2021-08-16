@@ -9,24 +9,23 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
-
-import { ConsumerAnswer } from '../../question/entities/consumer-answer.entity';
+import { EventPartner } from 'partner/entities/event-partner.entity';
+import { PartnerQuestion } from 'question/entities/partner-question.entity';
 
 @ObjectType()
 @Entity()
-export class Consumer extends BaseEntity {
+export class Partner extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: number;
 
   @Column({ type: 'varchar' })
   @Field(() => String)
-  email: string;
+  name: string;
 
   @Column({ type: 'varchar' })
-  @Field({ nullable: true })
-  selfieUuid: string;
+  @Field(() => String)
+  email: string;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
@@ -47,18 +46,17 @@ export class Consumer extends BaseEntity {
     this.updatedAt = new Date();
   }
 
-  @OneToMany(() => ConsumerPhoto, (consumerPhotos) => consumerPhotos.consumer, {
+  @OneToMany(() => EventPartner, (eventPartners) => eventPartners.partner, {
     cascade: true,
   })
-  @Field(() => [ConsumerPhoto])
-  consumerPhotos: Promise<ConsumerPhoto[]>;
+  @Field(() => [EventPartner])
+  eventPartners: Promise<EventPartner[]>;
 
   @OneToMany(
-    () => ConsumerAnswer,
-    (consumerAnswers) => consumerAnswers.consumer,
-    {
-      cascade: true,
-    },
+    () => PartnerQuestion,
+    (partnerQuestions) => partnerQuestions.partner,
+    { cascade: true },
   )
-  consumerAnswers: Promise<ConsumerAnswer[]>;
+  @Field(() => [PartnerQuestion])
+  partnerQuestions: Promise<PartnerQuestion[]>;
 }
