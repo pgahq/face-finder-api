@@ -4,18 +4,24 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ConsumerJwtStrategy } from 'auth/strategies/consumer-jwt.strategy';
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
-import { Event } from 'event/entities/event.entity';
-import { PartnerQuestion } from 'question/entities/partner-question.entity';
+import { Consumer } from 'consumer/entities/consumer.entity';
+import { Partner } from 'partner/entities/partner.entity';
 
-import { EventPartner } from './entities/event-partner.entity';
-import { Partner } from './entities/partner.entity';
-import { PartnerResolver } from './partner.resolver';
+import { ConsumerAnswer } from './entities/consumer-answer.entity';
+import { PartnerQuestion } from './entities/partner-question.entity';
+import { Question } from './entities/question.entity';
+import { QuestionResolver } from './question.resolver';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Event, Partner, EventPartner, PartnerQuestion]),
+    TypeOrmModule.forFeature([
+      Consumer,
+      Question,
+      Partner,
+      ConsumerAnswer,
+      PartnerQuestion,
+    ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -28,6 +34,6 @@ import { PartnerResolver } from './partner.resolver';
       inject: [ConfigService],
     }),
   ],
-  providers: [UserJwtStrategy, PartnerResolver, ConsumerJwtStrategy],
+  providers: [UserJwtStrategy, QuestionResolver],
 })
-export class PartnerModule {}
+export class QuestionModule {}

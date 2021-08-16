@@ -24,11 +24,11 @@ export class EventPartner extends BaseEntity {
   @Column({ type: 'int' })
   partnerId: number;
 
-  @ManyToOne(() => Partner, (partner) => partner.eventPartners, { eager: true })
+  @ManyToOne(() => Partner, (partner) => partner.eventPartners)
   @Field(() => Partner)
-  partner: Partner;
+  partner: Promise<Partner>;
 
-  @ManyToOne(() => Event, (event) => event.eventPartners, { eager: true })
+  @ManyToOne(() => Event, (event) => event.eventPartners)
   @Field(() => Event)
-  event: Event;
+  event: Promise<Event>;
 }

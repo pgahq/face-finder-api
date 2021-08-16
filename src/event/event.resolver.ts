@@ -3,7 +3,6 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { UserGuard } from 'auth/guards/user.guard';
 
-import { EventPartner } from '../partner/entities/event-partner.entity';
 import { CreateEventInput } from './dto/create-event.input';
 import { UpdateEventInput } from './dto/update-event.input';
 import { Event } from './entities/event.entity';
@@ -73,11 +72,5 @@ export class EventResolver {
       return await event.remove();
     }
     throw new NotFoundException();
-  }
-
-  @Query(() => [EventPartner], { name: 'sponsors' })
-  @UseGuards(UserGuard)
-  async sponsors(@Args('eventId', { type: () => Int }) eventId: number) {
-    return await EventPartner.find({ eventId: eventId });
   }
 }

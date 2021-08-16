@@ -5,27 +5,30 @@ import {
   BeforeUpdate,
   Column,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { EventPartner } from 'partner/entities/event-partner.entity';
-import { PartnerQuestion } from 'question/entities/partner-question.entity';
+import { Consumer } from 'consumer/entities/consumer.entity';
+
+import { Question } from './question.entity';
 
 @ObjectType()
-@Entity()
-export class Partner extends BaseEntity {
+@Entity('consumerAnswer')
+export class ConsumerAnswer extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: number;
 
-  @Column({ type: 'varchar' })
-  @Field(() => String)
-  name: string;
+  @Column({ type: 'int' })
+  consumerId: number;
+
+  @Column({ type: 'int' })
+  questionId: number;
 
   @Column({ type: 'varchar' })
   @Field(() => String)
-  email: string;
+  answer: string;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
@@ -46,17 +49,11 @@ export class Partner extends BaseEntity {
     this.updatedAt = new Date();
   }
 
-  @OneToMany(() => EventPartner, (eventPartners) => eventPartners.partner, {
-    cascade: true,
-  })
-  @Field(() => [EventPartner])
-  eventPartners: Promise<EventPartner[]>;
+  @ManyToOne(() => Consumer, (consumer) => consumer.consumerAnswers)
+  @Field(() => Consumer)
+  consumer: Promise<Consumer>;
 
-  @OneToMany(
-    () => PartnerQuestion,
-    (partnerQuestions) => partnerQuestions.partner,
-    { cascade: true },
-  )
-  @Field(() => [PartnerQuestion])
-  partnerQuestions: Promise<PartnerQuestion[]>;
+  @ManyToOne(() => Question, (question) => question.consumerAnswers)
+  @Field(() => Question)
+  question: Promise<Question>;
 }

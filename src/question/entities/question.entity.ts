@@ -9,23 +9,19 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { EventPartner } from 'partner/entities/event-partner.entity';
-import { PartnerQuestion } from 'question/entities/partner-question.entity';
+import { ConsumerAnswer } from './consumer-answer.entity';
+import { PartnerQuestion } from './partner-question.entity';
 
 @ObjectType()
 @Entity()
-export class Partner extends BaseEntity {
+export class Question extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: number;
 
   @Column({ type: 'varchar' })
   @Field(() => String)
-  name: string;
-
-  @Column({ type: 'varchar' })
-  @Field(() => String)
-  email: string;
+  content: string;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
@@ -46,17 +42,16 @@ export class Partner extends BaseEntity {
     this.updatedAt = new Date();
   }
 
-  @OneToMany(() => EventPartner, (eventPartners) => eventPartners.partner, {
-    cascade: true,
-  })
-  @Field(() => [EventPartner])
-  eventPartners: Promise<EventPartner[]>;
+  @OneToMany(
+    () => ConsumerAnswer,
+    (consumerAnswers) => consumerAnswers.question,
+  )
+  @Field(() => [ConsumerAnswer])
+  consumerAnswers: Promise<ConsumerAnswer[]>;
 
   @OneToMany(
     () => PartnerQuestion,
-    (partnerQuestions) => partnerQuestions.partner,
-    { cascade: true },
+    (partnerQuestions) => partnerQuestions.question,
   )
-  @Field(() => [PartnerQuestion])
   partnerQuestions: Promise<PartnerQuestion[]>;
 }

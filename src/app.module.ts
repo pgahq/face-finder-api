@@ -14,10 +14,10 @@ import {
 } from 'config';
 import { ConsumerModule } from 'consumer/consumer.module';
 import { EventModule } from 'event/event.module';
+import { PartnerModule } from 'partner/partner.module';
 import { PhotoModule } from 'photo/photo.module';
+import { QuestionModule } from 'question/question.module';
 import { UserModule } from 'user/user.module';
-
-import { PartnerModule } from './partner/partner.module';
 
 @Module({
   imports: [
@@ -58,6 +58,7 @@ import { PartnerModule } from './partner/partner.module';
     EventModule,
     PhotoModule,
     PartnerModule,
+    QuestionModule,
   ],
 })
 export class AppModule implements NestModule {

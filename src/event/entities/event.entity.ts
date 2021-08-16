@@ -60,5 +60,6 @@ export class Event extends BaseEntity {
   @OneToMany(() => EventPartner, (eventPartners) => eventPartners.event, {
     cascade: true,
   })
-  eventPartners: EventPartner[];
+  @Field(() => [EventPartner])
+  eventPartners: Promise<EventPartner[]>;
 }

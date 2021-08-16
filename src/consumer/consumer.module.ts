@@ -10,6 +10,7 @@ import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { Photo } from 'photo/entities/photo.entity';
+import { ConsumerAnswer } from 'question/entities/consumer-answer.entity';
 
 import { ConsumerResolver } from './consumer.resolver';
 import { ConsumerService } from './consumer.service';
@@ -19,7 +20,13 @@ import { NewConsumerProcessor } from './processors/new-consumer.processor';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Consumer, Photo, Event, ConsumerPhoto]),
+    TypeOrmModule.forFeature([
+      Consumer,
+      Photo,
+      Event,
+      ConsumerPhoto,
+      ConsumerAnswer,
+    ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

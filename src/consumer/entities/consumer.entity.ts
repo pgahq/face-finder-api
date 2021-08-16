@@ -11,6 +11,8 @@ import {
 
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 
+import { ConsumerAnswer } from '../../question/entities/consumer-answer.entity';
+
 @ObjectType()
 @Entity()
 export class Consumer extends BaseEntity {
@@ -48,5 +50,15 @@ export class Consumer extends BaseEntity {
   @OneToMany(() => ConsumerPhoto, (consumerPhotos) => consumerPhotos.consumer, {
     cascade: true,
   })
-  consumerPhotos: ConsumerPhoto[];
+  @Field(() => [ConsumerPhoto])
+  consumerPhotos: Promise<ConsumerPhoto[]>;
+
+  @OneToMany(
+    () => ConsumerAnswer,
+    (consumerAnswers) => consumerAnswers.consumer,
+    {
+      cascade: true,
+    },
+  )
+  consumerAnswers: Promise<ConsumerAnswer[]>;
 }
