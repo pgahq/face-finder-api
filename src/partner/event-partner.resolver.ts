@@ -25,12 +25,13 @@ export class EventPartnerResolver {
     throw new BadRequestException();
   }
 
-  @Mutation(() => EventPartner)
+  @Mutation(() => Boolean)
   @UseGuards(UserGuard)
   async removeEventPartner(@Args('id', { type: () => Int }) id: number) {
     const eventPartner = await EventPartner.findOne(id);
     if (eventPartner) {
-      return await eventPartner.remove();
+      await eventPartner.remove();
+      return true;
     }
     throw new BadRequestException();
   }

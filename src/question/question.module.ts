@@ -11,6 +11,7 @@ import { Partner } from 'partner/entities/partner.entity';
 import { ConsumerAnswer } from './entities/consumer-answer.entity';
 import { PartnerQuestion } from './entities/partner-question.entity';
 import { Question } from './entities/question.entity';
+import { PartnerQuestionResolver } from './partner-question.resolver';
 import { QuestionResolver } from './question.resolver';
 
 @Module({
@@ -34,6 +35,6 @@ import { QuestionResolver } from './question.resolver';
       inject: [ConfigService],
     }),
   ],
-  providers: [UserJwtStrategy, QuestionResolver],
+  providers: [UserJwtStrategy, QuestionResolver, PartnerQuestionResolver],
 })
 export class QuestionModule {}

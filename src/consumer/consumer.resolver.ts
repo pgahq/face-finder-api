@@ -116,10 +116,15 @@ export class ConsumerResolver {
     const event = Event.findOne(eventId);
     if (event) {
       const consumerPhotos = await consumer.consumerPhotos;
-      return consumerPhotos.filter((cPhoto) => async () => {
+      const filteredConsumerPhotos = [];
+      for (const cPhoto of consumerPhotos) {
         const photo = await cPhoto.photo;
-        return photo.event.id === eventId;
-      });
+        const event = await photo.event;
+        if (event.id === eventId) {
+          filteredConsumerPhotos.push(cPhoto);
+        }
+      }
+      return filteredConsumerPhotos;
     }
     throw new NotFoundException('event not found');
   }

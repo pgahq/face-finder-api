@@ -55,7 +55,7 @@ export class Event extends BaseEntity {
   }
 
   @OneToMany(() => Photo, (photo) => photo.event, { cascade: true })
-  photos: Photo[];
+  photos: Promise<Photo[]>;
 
   @OneToMany(() => EventPartner, (eventPartners) => eventPartners.event, {
     cascade: true,

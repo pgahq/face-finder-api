@@ -39,7 +39,7 @@ export class PartnerResolver {
 
   @Mutation(() => Partner)
   @UseGuards(UserGuard)
-  async updateEvent(
+  async updatePartner(
     @Args('updatePartnerInput') updatePartnerInput: UpdatePartnerInput,
   ) {
     const partner = await Partner.findOne(updatePartnerInput.id);

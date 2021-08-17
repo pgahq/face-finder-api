@@ -1,19 +1,19 @@
 import { Storage } from '@google-cloud/storage';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as FormData from 'form-data';
 import { getConnection } from 'typeorm';
 
 import { Event } from 'event/entities/event.entity';
-import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
-import { Photo } from 'photo/entities/photo.entity';
-import { ComprefaceService } from 'utils';
+import { PhotoService } from 'photo/photo.service';
 
 import { Consumer } from './entities/consumer.entity';
 
 @Injectable()
 export class ConsumerService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly photoService: PhotoService,
+  ) {}
 
   private readonly storage = new Storage({
     projectId: this.configService.get<string>('googleCloud.projectId'),
@@ -21,11 +21,6 @@ export class ConsumerService {
       'googleCloud.credentials',
     ),
   });
-
-  private readonly comprefaceService = new ComprefaceService(
-    this.configService.get<string>('compreface.host'),
-    this.configService.get<string>('compreface.apiKey'),
-  );
 
   async classifyPhotosByConsumer(consumer: Consumer) {
     const connection = getConnection();
@@ -47,43 +42,12 @@ export class ConsumerService {
 
         for (const file of files) {
           if (!file.name.endsWith('/')) {
-            const fileStream = file.createReadStream();
-            const formData = new FormData();
-            formData.append('file', fileStream, {
-              filename: file.name,
-              contentType: file.metadata.contentType,
-            });
-            const response = await this.comprefaceService.verify(
-              formData,
-              consumer.selfieUuid,
-              {},
+            await this.photoService.findFace(
+              queryRunner,
+              consumer,
+              file,
+              event,
             );
-            const mostSimilar = response.reduce((max, subject) =>
-              max.similarity > subject.similarity ? max : subject,
-            );
-            if (
-              mostSimilar.similarity >=
-              this.configService.get('compreface.groupSimilarityThreshold')
-            ) {
-              let photo = await queryRunner.manager.findOne(Photo, {
-                filename: file.name,
-              });
-              if (!photo) {
-                photo = new Photo();
-                photo.filename = file.name;
-                photo.event = event;
-                await queryRunner.manager.save(Photo, photo);
-              }
-              const consumerPhoto = new ConsumerPhoto();
-              consumerPhoto.consumer = Promise.resolve(consumer);
-              consumerPhoto.photo = Promise.resolve(photo);
-              consumerPhoto.similarity = mostSimilar.similarity;
-              consumerPhoto.boxXMin = mostSimilar.box.x_min;
-              consumerPhoto.boxXMax = mostSimilar.box.x_max;
-              consumerPhoto.boxYMin = mostSimilar.box.y_min;
-              consumerPhoto.boxYMax = mostSimilar.box.y_max;
-              await queryRunner.manager.save(ConsumerPhoto, consumerPhoto);
-            }
           }
         }
       }
