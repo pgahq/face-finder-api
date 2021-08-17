@@ -1,7 +1,4 @@
-import {
-  NotFoundException,
-  UseGuards,
-} from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { UserGuard } from 'auth/guards/user.guard';
