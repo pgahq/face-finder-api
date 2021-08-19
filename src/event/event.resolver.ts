@@ -1,4 +1,8 @@
-import { NotFoundException, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { UserGuard } from 'auth/guards/user.guard';
@@ -58,8 +62,12 @@ export class EventResolver {
     if (updateEventInput.endTime) {
       event.endTime = updateEventInput.endTime;
     }
-    if (updateEventInput.gcsBucket) {
+    // not update gcs bucket of event
+    if (updateEventInput.gcsBucket && !event.gcsBucket) {
       event.gcsBucket = updateEventInput.gcsBucket;
+    }
+    if (updateEventInput.gcsBucket && event.gcsBucket) {
+      throw new BadRequestException('Cannot update gcs bucket of event');
     }
     return await event.save();
   }

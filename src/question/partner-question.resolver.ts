@@ -1,4 +1,8 @@
-import { BadRequestException, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UseGuards,
+} from '@nestjs/common';
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 
 import { UserGuard } from 'auth/guards/user.guard';
@@ -25,12 +29,14 @@ export class PartnerQuestionResolver {
     throw new BadRequestException();
   }
 
-  @Mutation(() => PartnerQuestion)
+  @Mutation(() => Boolean)
   @UseGuards(UserGuard)
   async removePartnerQuestion(@Args('id', { type: () => Int }) id: number) {
     const partnerQuestion = await PartnerQuestion.findOne(id);
     if (partnerQuestion) {
-      return await partnerQuestion.remove();
+      await partnerQuestion.remove();
+      return true;
     }
+    throw new NotFoundException();
   }
 }

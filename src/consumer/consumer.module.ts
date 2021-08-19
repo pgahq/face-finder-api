@@ -10,6 +10,7 @@ import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { Photo } from 'photo/entities/photo.entity';
+import { PhotoModule } from 'photo/photo.module';
 import { ConsumerAnswer } from 'question/entities/consumer-answer.entity';
 
 import { ConsumerResolver } from './consumer.resolver';
@@ -41,6 +42,7 @@ import { NewConsumerProcessor } from './processors/new-consumer.processor';
     BullModule.registerQueue({
       name: newConsumerQueueConstants.name,
     }),
+    PhotoModule,
   ],
   providers: [
     ConsumerResolver,

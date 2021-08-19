@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConsumerJwtStrategy } from 'auth/strategies/consumer-jwt.strategy';
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Event } from 'event/entities/event.entity';
+import { EventPartnerResolver } from 'partner/event-partner.resolver';
 import { PartnerQuestion } from 'question/entities/partner-question.entity';
 
 import { EventPartner } from './entities/event-partner.entity';
@@ -28,6 +29,11 @@ import { PartnerResolver } from './partner.resolver';
       inject: [ConfigService],
     }),
   ],
-  providers: [UserJwtStrategy, PartnerResolver, ConsumerJwtStrategy],
+  providers: [
+    UserJwtStrategy,
+    PartnerResolver,
+    ConsumerJwtStrategy,
+    EventPartnerResolver,
+  ],
 })
 export class PartnerModule {}

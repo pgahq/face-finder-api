@@ -48,9 +48,7 @@ export class ConsumerPhoto extends BaseEntity {
   @Field(() => Photo)
   photo: Promise<Photo>;
 
-  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhotos, {
-    eager: true,
-  })
+  @ManyToOne(() => Consumer, (consumer) => consumer.consumerPhotos)
   @Field(() => Consumer)
   consumer: Promise<Consumer>;
 }
