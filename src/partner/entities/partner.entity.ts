@@ -9,8 +9,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { EventPartner } from 'partner/entities/event-partner.entity';
 import { PartnerQuestion } from 'question/entities/partner-question.entity';
+
+import { ConsumerPartner } from '../entities/consumer-partner.entity';
+import { EventPartner } from '../entities/event-partner.entity';
 
 @ObjectType()
 @Entity()
@@ -59,4 +61,12 @@ export class Partner extends BaseEntity {
   )
   @Field(() => [PartnerQuestion])
   partnerQuestions: Promise<PartnerQuestion[]>;
+
+  @OneToMany(
+    () => ConsumerPartner,
+    (consumerPartners) => consumerPartners.partner,
+    { cascade: true },
+  )
+  @Field(() => [ConsumerPartner])
+  consumerPartners: Promise<ConsumerPartner[]>;
 }

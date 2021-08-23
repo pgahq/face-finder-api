@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Consumer } from 'consumer/entities/consumer.entity';
 import { Partner } from 'partner/entities/partner.entity';
+import { ConsumerAnswerResolver } from 'question/consumer-answer.resolver';
 
 import { ConsumerAnswer } from './entities/consumer-answer.entity';
 import { PartnerQuestion } from './entities/partner-question.entity';
@@ -35,6 +36,11 @@ import { QuestionResolver } from './question.resolver';
       inject: [ConfigService],
     }),
   ],
-  providers: [UserJwtStrategy, QuestionResolver, PartnerQuestionResolver],
+  providers: [
+    UserJwtStrategy,
+    QuestionResolver,
+    PartnerQuestionResolver,
+    ConsumerAnswerResolver,
+  ],
 })
 export class QuestionModule {}
