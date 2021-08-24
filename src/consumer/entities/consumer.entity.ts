@@ -9,9 +9,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { ConsumerPartner } from 'partner/entities/consumer-partner.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
-
-import { ConsumerAnswer } from '../../question/entities/consumer-answer.entity';
+import { ConsumerAnswer } from 'question/entities/consumer-answer.entity';
 
 @ObjectType()
 @Entity()
@@ -61,4 +61,12 @@ export class Consumer extends BaseEntity {
     },
   )
   consumerAnswers: Promise<ConsumerAnswer[]>;
+
+  @OneToMany(
+    () => ConsumerPartner,
+    (consumerPartners) => consumerPartners.consumer,
+    { cascade: true },
+  )
+  @Field(() => [ConsumerPartner])
+  consumerPartners: Promise<ConsumerPartner[]>;
 }

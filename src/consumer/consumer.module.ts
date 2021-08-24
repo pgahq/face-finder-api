@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConsumerJwtStrategy } from 'auth/strategies/consumer-jwt.strategy';
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Event } from 'event/entities/event.entity';
+import { ConsumerPartner } from 'partner/entities/consumer-partner.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { Photo } from 'photo/entities/photo.entity';
 import { PhotoModule } from 'photo/photo.module';
@@ -27,6 +28,7 @@ import { NewConsumerProcessor } from './processors/new-consumer.processor';
       Event,
       ConsumerPhoto,
       ConsumerAnswer,
+      ConsumerPartner,
     ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({

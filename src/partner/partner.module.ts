@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConsumerJwtStrategy } from 'auth/strategies/consumer-jwt.strategy';
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Event } from 'event/entities/event.entity';
+import { ConsumerPartnerResolver } from 'partner/consumer-partner.resolver';
+import { ConsumerPartner } from 'partner/entities/consumer-partner.entity';
 import { EventPartnerResolver } from 'partner/event-partner.resolver';
 import { PartnerQuestion } from 'question/entities/partner-question.entity';
 
@@ -16,7 +18,13 @@ import { PartnerResolver } from './partner.resolver';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Event, Partner, EventPartner, PartnerQuestion]),
+    TypeOrmModule.forFeature([
+      Event,
+      Partner,
+      EventPartner,
+      PartnerQuestion,
+      ConsumerPartner,
+    ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -34,6 +42,7 @@ import { PartnerResolver } from './partner.resolver';
     PartnerResolver,
     ConsumerJwtStrategy,
     EventPartnerResolver,
+    ConsumerPartnerResolver,
   ],
 })
 export class PartnerModule {}
