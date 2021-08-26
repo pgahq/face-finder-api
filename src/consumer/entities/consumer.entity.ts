@@ -60,6 +60,7 @@ export class Consumer extends BaseEntity {
       cascade: true,
     },
   )
+  @Field(() => [ConsumerAnswer])
   consumerAnswers: Promise<ConsumerAnswer[]>;
 
   @OneToMany(

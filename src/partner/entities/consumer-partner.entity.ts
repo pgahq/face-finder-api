@@ -1,6 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   BaseEntity,
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   ManyToOne,
@@ -23,6 +25,25 @@ export class ConsumerPartner extends BaseEntity {
 
   @Column({ type: 'int' })
   partnerId: number;
+
+  @Column({ type: 'timestamp without time zone' })
+  @Field(() => Date)
+  createdAt: Date;
+
+  @Column({ type: 'timestamp without time zone' })
+  @Field(() => Date)
+  updatedAt: Date;
+
+  @BeforeInsert()
+  public setDate(): void {
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+  }
+
+  @BeforeUpdate()
+  public setUpdateDate(): void {
+    this.updatedAt = new Date();
+  }
 
   @ManyToOne(() => Partner, (partner) => partner.consumerPartners)
   @Field(() => Partner)
