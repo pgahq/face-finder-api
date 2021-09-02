@@ -2,6 +2,7 @@ export TZ=UTC
 
 export JWT_SECRET=asdgdgdsag
 export EXPIRES_IN=3600s
+export API_KEY=serverless-1324lfjdsklkcmvkjtkrjlsaflkepoiwrolghiteldk93r
 
 export TYPEORM_CONNECTION=postgres
 export TYPEORM_HOST=localhost
