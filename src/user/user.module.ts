@@ -9,12 +9,12 @@ import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { Photo } from 'photo/entities/photo.entity';
-import { TriggerMailerProcessor } from 'user/processors/trigger-mailer.processor';
-import { triggerMailerQueueConstants } from 'user/trigger-mailer-queue.constant';
-import { UserService } from 'user/user.service';
 
 import { User } from './entities/user.entity';
+import { TriggerMailerProcessor } from './processors/trigger-mailer.processor';
+import { triggerMailerQueueConstants } from './trigger-mailer-queue.constant';
 import { UserResolver } from './user.resolver';
+import { UserService } from './user.service';
 
 @Module({
   imports: [

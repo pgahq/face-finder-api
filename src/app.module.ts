@@ -3,6 +3,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { getConnectionOptions } from 'typeorm';
 
@@ -20,7 +21,6 @@ import { PartnerModule } from 'partner/partner.module';
 import { PhotoModule } from 'photo/photo.module';
 import { QuestionModule } from 'question/question.module';
 import { UserModule } from 'user/user.module';
-import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 
 @Module({
   imports: [

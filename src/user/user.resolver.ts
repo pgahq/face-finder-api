@@ -1,6 +1,4 @@
 import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import Imgproxy, { Gravity } from 'imgproxy';
 import {
   NotFoundException,
   UnauthorizedException,
@@ -10,18 +8,18 @@ import { ConfigService } from '@nestjs/config';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { Queue } from 'bull';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { UserGuard } from 'auth/guards/user.guard';
 import { Event } from 'event/entities/event.entity';
-import { newPhotoQueueConstants } from 'photo/new-photo-queue.constant';
-import { triggerMailerQueueConstants } from 'user/trigger-mailer-queue.constant';
 
 import { CreateUserInput } from './dto/create-user.input';
 import { LoginInput } from './dto/login.input';
 import { LoginType } from './dto/login.type';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
+import { triggerMailerQueueConstants } from './trigger-mailer-queue.constant';
 
 const saltOrRounds = 10;
 
@@ -107,7 +105,7 @@ export class UserResolver {
   ) {
     const event = await Event.findOne(eventId);
     if (!event) {
-      throw new NotFoundException('Event doesnot exist');
+      throw new NotFoundException('Event does not exist');
     }
     await this.triggerMailerQueue.add(
       triggerMailerQueueConstants.handler,
