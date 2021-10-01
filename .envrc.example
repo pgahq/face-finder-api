@@ -28,3 +28,9 @@ export QUEUE_PORT=6379
 export GOOGLE_CLOUD_PROJECT_ID='face-finder-318218'
 export GOOGLE_CLOUD_STORAGE_GALLERY_BUCKET='face-finder-storage'
 export GOOGLE_CLOUD_CREDENTIALS=''
+
+export IMGPROXY_URL=''
+export IMGPROXY_KEY=''
+export IMGPROXY_SALT=''
+export SENDGRID_API_KEY=''
+export MAILER_FROM='yourphotos@pga.com'

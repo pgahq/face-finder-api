@@ -11,6 +11,8 @@ import {
   comprefaceConfig,
   googleStorageConfig,
   graphqlConfig,
+  imgproxyConfig,
+  mailerConfig,
 } from 'config';
 import { ConsumerModule } from 'consumer/consumer.module';
 import { EventModule } from 'event/event.module';
@@ -18,12 +20,20 @@ import { PartnerModule } from 'partner/partner.module';
 import { PhotoModule } from 'photo/photo.module';
 import { QuestionModule } from 'question/question.module';
 import { UserModule } from 'user/user.module';
+import { SendGridModule } from '@ntegral/nestjs-sendgrid';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [authConfig, graphqlConfig, comprefaceConfig, googleStorageConfig],
+      load: [
+        authConfig,
+        graphqlConfig,
+        comprefaceConfig,
+        googleStorageConfig,
+        imgproxyConfig,
+        mailerConfig,
+      ],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async () =>
@@ -50,6 +60,13 @@ import { UserModule } from 'user/user.module';
           host: configService.get('QUEUE_HOST'),
           port: parseInt(configService.get('QUEUE_PORT')),
         },
+      }),
+      inject: [ConfigService],
+    }),
+    SendGridModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        apiKey: configService.get<string>('mailer.sendgridApiKey'),
       }),
       inject: [ConfigService],
     }),

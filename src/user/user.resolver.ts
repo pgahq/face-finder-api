@@ -1,3 +1,6 @@
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import Imgproxy, { Gravity } from 'imgproxy';
 import {
   NotFoundException,
   UnauthorizedException,
@@ -10,6 +13,9 @@ import * as bcrypt from 'bcrypt';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { UserGuard } from 'auth/guards/user.guard';
+import { Event } from 'event/entities/event.entity';
+import { newPhotoQueueConstants } from 'photo/new-photo-queue.constant';
+import { triggerMailerQueueConstants } from 'user/trigger-mailer-queue.constant';
 
 import { CreateUserInput } from './dto/create-user.input';
 import { LoginInput } from './dto/login.input';
@@ -22,6 +28,8 @@ const saltOrRounds = 10;
 @Resolver(() => User)
 export class UserResolver {
   constructor(
+    @InjectQueue(triggerMailerQueueConstants.name)
+    private readonly triggerMailerQueue: Queue,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -90,5 +98,21 @@ export class UserResolver {
       };
     }
     throw new UnauthorizedException();
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(UserGuard)
+  async triggerEmailAfterEvent(
+    @Args('eventId', { type: () => Int }) eventId: number,
+  ) {
+    const event = await Event.findOne(eventId);
+    if (!event) {
+      throw new NotFoundException('Event doesnot exist');
+    }
+    await this.triggerMailerQueue.add(
+      triggerMailerQueueConstants.handler,
+      event,
+    );
+    return true;
   }
 }
