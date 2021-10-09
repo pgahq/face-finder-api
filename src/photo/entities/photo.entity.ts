@@ -27,5 +27,6 @@ export class Photo extends BaseEntity {
   consumerPhotos: Promise<ConsumerPhoto[]>;
 
   @ManyToOne(() => Event, (event) => event.photos)
+  @Field(() => Event)
   event: Promise<Event>;
 }

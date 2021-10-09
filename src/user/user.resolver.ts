@@ -12,7 +12,9 @@ import { Queue } from 'bull';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { UserGuard } from 'auth/guards/user.guard';
+import { Consumer } from 'consumer/entities/consumer.entity';
 import { Event } from 'event/entities/event.entity';
+import { Photo } from 'photo/entities/photo.entity';
 
 import { CreateUserInput } from './dto/create-user.input';
 import { LoginInput } from './dto/login.input';
@@ -112,5 +114,28 @@ export class UserResolver {
       event,
     );
     return true;
+  }
+
+  @Query(() => [Photo])
+  @UseGuards(UserGuard)
+  async consumerPhotosInEvent(
+    @Args('consumerId', { type: () => Int }) consumerId: number,
+    @Args('eventId', { type: () => Int }) eventId: number
+  ) {
+    const photos = [];
+    const inputConsumer = await Consumer.findOne(consumerId);
+    const inputEvent = await Event.findOne(eventId);
+    if (!inputConsumer || !inputEvent) {
+      throw new NotFoundException('Not found consumer or event');
+    }
+    const consumerPhotos = await inputConsumer.consumerPhotos;
+    for (const cPhoto of consumerPhotos) {
+      const photo = await cPhoto.photo;
+      const event = await photo.event;
+      if (event.id === inputEvent.id) {
+        photos.push(photo);
+      }
+    }
+    return photos;
   }
 }
