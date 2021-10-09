@@ -36,7 +36,7 @@ export class ComprefaceService {
         });
         resolve(response.data.image_id);
       } catch (error) {
-        reject(error.response.data.message);
+        reject(error.message);
       }
     });
   }
@@ -55,7 +55,7 @@ export class ComprefaceService {
         });
         resolve(response.data.result);
       } catch (error) {
-        reject(error.response);
+        reject(error.message);
       }
     });
   }

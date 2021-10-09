@@ -1,6 +1,6 @@
 import { InjectQueue } from '@nestjs/bull';
 import {
-  BadRequestException,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
   UseGuards,
@@ -64,7 +64,7 @@ export class ConsumerResolver {
         );
         consumer.selfieUuid = selfieUuid;
       } catch (error) {
-        throw new BadRequestException(error);
+        throw new InternalServerErrorException(error);
       }
       await consumer.save();
       await this.newConsumerQueue.add(
@@ -91,7 +91,7 @@ export class ConsumerResolver {
           }
         }
       } catch (error) {
-        throw new BadRequestException(error);
+        throw new InternalServerErrorException(error);
       }
       if (!matching) {
         throw new UnauthorizedException('Your face is not matching');
@@ -133,5 +133,20 @@ export class ConsumerResolver {
   @UseGuards(UserGuard)
   async consumers() {
     return await Consumer.find();
+  }
+
+  @Query(() => [Event])
+  @UseGuards(ConsumerGuard)
+  async myEvents(@CurrentUser() consumer: Consumer) {
+    const eventMap = new Map<number, Event>();
+    const consumerPhotos = await consumer.consumerPhotos;
+    for (const cPhoto of consumerPhotos) {
+      const photo = await cPhoto.photo;
+      const event = await photo.event;
+      if (!eventMap.has(event.id)) {
+        eventMap.set(event.id, event);
+      }
+    }
+    return Array.from(eventMap.values());
   }
 }
