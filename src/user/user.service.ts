@@ -1,10 +1,13 @@
+import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectSendGrid, SendGridService } from '@ntegral/nestjs-sendgrid';
+import { Queue } from 'bull';
 import Imgproxy from 'imgproxy';
 
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
+import { mailerQueueConstants } from 'user/mailer-queue.constant';
 
 @Injectable()
 export class UserService {
@@ -16,6 +19,8 @@ export class UserService {
   });
 
   constructor(
+    @InjectQueue(mailerQueueConstants.name)
+    private readonly triggerMailerQueue: Queue,
     @InjectSendGrid() private readonly sendGridClient: SendGridService,
     private readonly configService: ConfigService,
   ) {}
@@ -54,9 +59,7 @@ export class UserService {
 
   //TODO:
   // - add template for email
-  // - retry in case of failing to send email
-  async sendEmails(event: Event): Promise<Map<string, boolean>> {
-    const emailStatus = new Map<string, boolean>();
+  async triggerMailer(event: Event) {
     const consumerPhotos = await this.consumerGallery(event);
     for (const [consumerEmail, photos] of consumerPhotos) {
       const msg = {
@@ -65,11 +68,19 @@ export class UserService {
         subject: 'PGA - Event gallery',
         html: this.formatPhotos(photos),
       };
-      await this.sendGridClient
-        .send(msg)
-        .then(() => emailStatus.set(consumerEmail, true))
-        .catch(() => emailStatus.set(consumerEmail, false));
-      return emailStatus;
+      await this.triggerMailerQueue.add(
+        mailerQueueConstants.sendEmailHandler,
+        msg,
+      );
     }
+  }
+
+  async sendEmail(msg) {
+    await this.sendGridClient.send(msg).catch(async function (error) {
+      await this.triggerMailerQueue.add(
+        mailerQueueConstants.sendEmailHandler,
+        msg,
+      );
+    });
   }
 }

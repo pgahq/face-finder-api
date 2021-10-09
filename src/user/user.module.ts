@@ -11,8 +11,8 @@ import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { Photo } from 'photo/entities/photo.entity';
 
 import { User } from './entities/user.entity';
-import { TriggerMailerProcessor } from './processors/trigger-mailer.processor';
-import { triggerMailerQueueConstants } from './trigger-mailer-queue.constant';
+import { mailerQueueConstants } from './mailer-queue.constant';
+import { MailerProcessor } from './processors/mailer.processor';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
 
@@ -31,15 +31,10 @@ import { UserService } from './user.service';
       inject: [ConfigService],
     }),
     BullModule.registerQueue({
-      name: triggerMailerQueueConstants.name,
+      name: mailerQueueConstants.name,
     }),
   ],
 
-  providers: [
-    UserResolver,
-    UserJwtStrategy,
-    TriggerMailerProcessor,
-    UserService,
-  ],
+  providers: [UserResolver, UserJwtStrategy, MailerProcessor, UserService],
 })
 export class UserModule {}
