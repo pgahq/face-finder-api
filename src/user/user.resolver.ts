@@ -19,14 +19,14 @@ import { LoginInput } from './dto/login.input';
 import { LoginType } from './dto/login.type';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './entities/user.entity';
-import { triggerMailerQueueConstants } from './trigger-mailer-queue.constant';
+import { mailerQueueConstants } from './mailer-queue.constant';
 
 const saltOrRounds = 10;
 
 @Resolver(() => User)
 export class UserResolver {
   constructor(
-    @InjectQueue(triggerMailerQueueConstants.name)
+    @InjectQueue(mailerQueueConstants.name)
     private readonly triggerMailerQueue: Queue,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
@@ -108,7 +108,7 @@ export class UserResolver {
       throw new NotFoundException('Event does not exist');
     }
     await this.triggerMailerQueue.add(
-      triggerMailerQueueConstants.handler,
+      mailerQueueConstants.afterEventHandler,
       event,
     );
     return true;

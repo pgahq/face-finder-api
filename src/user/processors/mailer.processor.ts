@@ -10,12 +10,12 @@ import { Job } from 'bull';
 
 import { Event } from 'event/entities/event.entity';
 
-import { triggerMailerQueueConstants } from '../trigger-mailer-queue.constant';
+import { mailerQueueConstants } from '../mailer-queue.constant';
 import { UserService } from '../user.service';
 
-@Processor(triggerMailerQueueConstants.name)
-export class TriggerMailerProcessor {
-  private readonly logger = new Logger(TriggerMailerProcessor.name);
+@Processor(mailerQueueConstants.name)
+export class MailerProcessor {
+  private readonly logger = new Logger(MailerProcessor.name);
   constructor(private readonly userService: UserService) {}
   @OnQueueActive()
   onActive(job: Job) {
@@ -42,9 +42,15 @@ export class TriggerMailerProcessor {
   }
 
   //  TODO: save event-consumer-mailStatus
-  @Process(triggerMailerQueueConstants.handler)
+  @Process(mailerQueueConstants.afterEventHandler)
   async handleAfterEvent(job: Job<Event>) {
     const event = job.data;
-    await this.userService.sendEmails(event);
+    await this.userService.triggerMailer(event);
+  }
+
+  @Process(mailerQueueConstants.sendEmailHandler)
+  async handleSendEmail(job: Job<Event>) {
+    const msg = job.data;
+    await this.userService.sendEmail(msg);
   }
 }
