@@ -2,6 +2,7 @@ import { File, Storage } from '@google-cloud/storage';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as FormData from 'form-data';
+import Imgproxy from 'imgproxy';
 import { getConnection, QueryRunner } from 'typeorm';
 
 import { Consumer } from 'consumer/entities/consumer.entity';
@@ -26,6 +27,13 @@ export class PhotoService {
     this.configService.get<string>('compreface.host'),
     this.configService.get<string>('compreface.apiKey'),
   );
+
+  private readonly imgproxy = new Imgproxy({
+    baseUrl: this.configService.get<string>('imgproxy.url'),
+    key: this.configService.get<string>('imgproxy.key'),
+    salt: this.configService.get<string>('imgproxy.salt'),
+    encode: true,
+  });
 
   async recognizeFaces(filename: string) {
     const connection = getConnection();
@@ -114,5 +122,12 @@ export class PhotoService {
       consumerPhoto.boxYMax = mostSimilar.box.y_max;
       await queryRunner.manager.save(ConsumerPhoto, consumerPhoto);
     }
+  }
+
+  async getPhotoUrl(filename: string) {
+    const photoUrl = `gs://${this.configService.get<string>(
+      'googleCloud.storageGalleryBucket',
+    )}/${filename}`;
+    return this.imgproxy.builder().generateUrl(photoUrl, 'png');
   }
 }
