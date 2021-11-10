@@ -128,6 +128,6 @@ export class PhotoService {
     const photoUrl = `gs://${this.configService.get<string>(
       'googleCloud.storageGalleryBucket',
     )}/${filename}`;
-    return this.imgproxy.builder().generateUrl(photoUrl, 'png');
+    return `https://${this.imgproxy.builder().generateUrl(photoUrl, 'png')}`;
   }
 }

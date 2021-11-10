@@ -9,6 +9,7 @@ import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { Photo } from 'photo/entities/photo.entity';
+import { PhotoService } from 'photo/photo.service';
 
 import { User } from './entities/user.entity';
 import { mailerQueueConstants } from './mailer-queue.constant';
@@ -35,6 +36,12 @@ import { UserService } from './user.service';
     }),
   ],
 
-  providers: [UserResolver, UserJwtStrategy, MailerProcessor, UserService],
+  providers: [
+    UserResolver,
+    UserJwtStrategy,
+    MailerProcessor,
+    UserService,
+    PhotoService,
+  ],
 })
 export class UserModule {}
