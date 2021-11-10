@@ -29,9 +29,9 @@ export class PhotoResolver {
     return true;
   }
 
-  @ResolveField('proxyURL', () => String)
-  getProxyURL(@Parent() photo: Photo) {
+  @ResolveField('url', () => String)
+  getPhotoUrl(@Parent() photo: Photo) {
     const { filename } = photo;
-    return this.photoService.getProxyURL(filename);
+    return this.photoService.getPhotoUrl(filename);
   }
 }

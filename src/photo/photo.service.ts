@@ -124,7 +124,7 @@ export class PhotoService {
     }
   }
 
-  async getProxyURL(filename: string) {
+  async getPhotoUrl(filename: string) {
     const photoUrl = `gs://${this.configService.get<string>(
       'googleCloud.storageGalleryBucket',
     )}/${filename}`;
