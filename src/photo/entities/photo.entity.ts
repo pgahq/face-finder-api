@@ -23,6 +23,9 @@ export class Photo extends BaseEntity {
   @Field(() => String)
   filename: string;
 
+  @Field(() => String)
+  proxyURL: string;
+
   @OneToMany(() => ConsumerPhoto, (consumerPhotos) => consumerPhotos.photo)
   consumerPhotos: Promise<ConsumerPhoto[]>;
 
