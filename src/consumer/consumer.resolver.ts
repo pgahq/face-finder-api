@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { Queue } from 'bull';
+import { CreateConsumerInput } from 'consumer/dto/create-consumer.input';
 import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
@@ -34,9 +35,11 @@ export class ConsumerResolver {
 
   @Mutation(() => VerifyConsumerType)
   async verifyConsumer(
-    @Args({ name: 'email', type: () => String }) email: string,
+    @Args('createConsumerInput') createConsumerInput: CreateConsumerInput,
     @Args({ name: 'selfie', type: () => GraphQLUpload }) selfie: FileUpload,
   ) {
+    const email = createConsumerInput.email;
+    const snsAccounts = createConsumerInput.snsAccounts;
     const { filename, mimetype, encoding, createReadStream } = selfie;
     const formData = new FormData();
     formData.append('file', createReadStream(), {
