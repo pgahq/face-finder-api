@@ -7,6 +7,7 @@ import Imgproxy from 'imgproxy';
 
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
+import { PhotoService } from 'photo/photo.service';
 import { mailerQueueConstants } from 'user/mailer-queue.constant';
 
 @Injectable()
@@ -23,26 +24,22 @@ export class UserService {
     private readonly triggerMailerQueue: Queue,
     @InjectSendGrid() private readonly sendGridClient: SendGridService,
     private readonly configService: ConfigService,
+    private readonly photoService: PhotoService,
   ) {}
 
   async consumerGallery(event: Event): Promise<Map<string, string[]>> {
     const consumerPhotos = new Map<string, string[]>();
     event = await Event.findOne(event.id);
     for (const photo of await event.photos) {
-      const photoUrl = `gs://${this.configService.get<string>(
-        'googleCloud.storageGalleryBucket',
-      )}/${photo.filename}`;
-      const photoProxyUrl = this.imgproxy
-        .builder()
-        .generateUrl(photoUrl, 'png');
+      const proxyUrl = await this.photoService.getPhotoUrl(photo.filename);
       const cps = await ConsumerPhoto.find({ photoId: photo.id });
       for (const c of cps) {
         const consumerEmail = (await c.consumer).email;
         if (consumerPhotos.has(consumerEmail)) {
           const photos = consumerPhotos.get(consumerEmail);
-          photos.push(photoProxyUrl);
+          photos.push(proxyUrl);
         } else {
-          consumerPhotos.set(consumerEmail, [photoProxyUrl]);
+          consumerPhotos.set(consumerEmail, [proxyUrl]);
         }
       }
     }
