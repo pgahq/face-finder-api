@@ -7,7 +7,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConsumerJwtStrategy } from 'auth/strategies/consumer-jwt.strategy';
 import { UserJwtStrategy } from 'auth/strategies/user-jwt.strategy';
-import { ConsumerSNSAccount } from 'consumer/entities/consumer-sns-account.entity';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPartner } from 'partner/entities/consumer-partner.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
@@ -18,6 +17,7 @@ import { ConsumerAnswer } from 'question/entities/consumer-answer.entity';
 import { ConsumerResolver } from './consumer.resolver';
 import { ConsumerService } from './consumer.service';
 import { Consumer } from './entities/consumer.entity';
+import { ConsumerSNSAccount } from './entities/consumer-sns-account.entity';
 import { newConsumerQueueConstants } from './new-consumer-queue.constant';
 import { NewConsumerProcessor } from './processors/new-consumer.processor';
 
