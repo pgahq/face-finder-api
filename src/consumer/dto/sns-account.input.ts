@@ -6,5 +6,5 @@ export class SNSAccountInput {
   sns: string;
 
   @Field(() => String)
-  profileURL: string;
+  profileUrl: string;
 }

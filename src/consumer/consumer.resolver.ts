@@ -9,20 +9,21 @@ import { ConfigService } from '@nestjs/config';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 import { Queue } from 'bull';
-import { CreateConsumerInput } from 'consumer/dto/create-consumer.input';
 import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 import { CurrentUser } from 'auth/decorator/current-user.decorator';
 import { ConsumerGuard } from 'auth/guards/consumer.guard';
 import { UserGuard } from 'auth/guards/user.guard';
-import { newConsumerQueueConstants } from 'consumer/new-consumer-queue.constant';
 import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { ComprefaceService } from 'utils';
 
+import { SNSAccountInput } from './dto/sns-account.input';
 import { VerifyConsumerType } from './dto/verify-consumer.type';
 import { Consumer } from './entities/consumer.entity';
+import { ConsumerSNSAccount } from './entities/consumer-sns-account.entity';
+import { newConsumerQueueConstants } from './new-consumer-queue.constant';
 
 @Resolver()
 export class ConsumerResolver {
@@ -35,11 +36,9 @@ export class ConsumerResolver {
 
   @Mutation(() => VerifyConsumerType)
   async verifyConsumer(
-    @Args('createConsumerInput') createConsumerInput: CreateConsumerInput,
     @Args({ name: 'selfie', type: () => GraphQLUpload }) selfie: FileUpload,
+    @Args({ name: 'email', type: () => String }) email: string,
   ) {
-    const email = createConsumerInput.email;
-    const snsAccounts = createConsumerInput.snsAccounts;
     const { filename, mimetype, encoding, createReadStream } = selfie;
     const formData = new FormData();
     formData.append('file', createReadStream(), {
@@ -108,6 +107,31 @@ export class ConsumerResolver {
       }),
       expiresIn: this.configService.get<string>('auth.expiresIn'),
     };
+  }
+
+  @Mutation(() => Consumer)
+  @UseGuards(ConsumerGuard)
+  async updateSNSAccounts(
+    @CurrentUser() consumer: Consumer,
+    @Args('consumerSNSAccounts', { type: () => [SNSAccountInput] })
+    snsAccounts: [SNSAccountInput],
+  ) {
+    for (const account of snsAccounts) {
+      let consumerAccount = await ConsumerSNSAccount.findOne({
+        consumerId: consumer.id,
+        sns: account.sns,
+      });
+      if (consumerAccount) {
+        consumerAccount.profileUrl = account.profileUrl;
+      } else {
+        consumerAccount = new ConsumerSNSAccount();
+        consumerAccount.consumer = Promise.resolve(consumer);
+        consumerAccount.sns = account.sns;
+        consumerAccount.profileUrl = account.profileUrl;
+      }
+      await consumerAccount.save();
+    }
+    return consumer;
   }
 
   @Query(() => [ConsumerPhoto])

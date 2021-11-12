@@ -27,7 +27,7 @@ export class ConsumerSNSAccount extends BaseEntity {
 
   @Column({ type: 'varchar' })
   @Field(() => String)
-  profileURL: string;
+  profileUrl: string;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
