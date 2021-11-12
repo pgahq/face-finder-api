@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Consumer } from 'consumer/entities/consumer.entity';
+import { Consumer } from '../entities/consumer.entity';
 
 @ObjectType()
 @Entity('consumerSNSAccount')
