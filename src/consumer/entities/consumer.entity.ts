@@ -13,6 +13,8 @@ import { ConsumerPartner } from 'partner/entities/consumer-partner.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { ConsumerAnswer } from 'question/entities/consumer-answer.entity';
 
+import { ConsumerSNSAccount } from '../entities/consumer-sns-account.entity';
+
 @ObjectType()
 @Entity()
 export class Consumer extends BaseEntity {
@@ -70,4 +72,14 @@ export class Consumer extends BaseEntity {
   )
   @Field(() => [ConsumerPartner])
   consumerPartners: Promise<ConsumerPartner[]>;
+
+  @OneToMany(
+    () => ConsumerSNSAccount,
+    (consumerSNSAccounts) => consumerSNSAccounts.consumer,
+    {
+      cascade: true,
+    },
+  )
+  @Field(() => [ConsumerSNSAccount])
+  consumerSNSAccounts: Promise<ConsumerSNSAccount[]>;
 }
