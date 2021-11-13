@@ -1,7 +1,7 @@
 import { Storage } from '@google-cloud/storage';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { getConnection } from 'typeorm';
+import { getConnection, IsNull, Not } from 'typeorm';
 
 import { Consumer } from 'consumer/entities/consumer.entity';
 import { PhotoService } from 'photo/photo.service';
@@ -36,7 +36,9 @@ export class EventService {
           this.configService.get<string>('googleCloud.storageGalleryBucket'),
         )
         .getFiles({ prefix: event.gcsBucket });
-      const consumers = await queryRunner.manager.find(Consumer);
+      const consumers = await queryRunner.manager.find(Consumer, {
+        selfieUuid: Not(IsNull()),
+      });
       for (const consumer of consumers) {
         for (const file of files) {
           if (!file.name.endsWith('/')) {
@@ -51,7 +53,7 @@ export class EventService {
       }
       await queryRunner.commitTransaction();
     } catch (err) {
-      console.log(err);
+      console.error(err);
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();

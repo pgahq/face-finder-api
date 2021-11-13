@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as FormData from 'form-data';
 import Imgproxy from 'imgproxy';
-import { getConnection, QueryRunner } from 'typeorm';
+import { getConnection, IsNull, Not, QueryRunner } from 'typeorm';
 
 import { Consumer } from 'consumer/entities/consumer.entity';
 import { Event } from 'event/entities/event.entity';
@@ -67,12 +67,15 @@ export class PhotoService {
       if (!file) {
         throw new Error('file does not exist');
       }
-      const consumers = await queryRunner.manager.find(Consumer);
+      const consumers = await queryRunner.manager.find(Consumer, {
+        selfieUuid: Not(IsNull()),
+      });
       for (const consumer of consumers) {
         await this.findFace(queryRunner, consumer, file, event);
       }
       await queryRunner.commitTransaction();
     } catch (err) {
+      console.error(err);
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();
