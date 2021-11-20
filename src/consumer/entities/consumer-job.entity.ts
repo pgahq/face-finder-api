@@ -12,8 +12,8 @@ import {
 import { Consumer } from '../entities/consumer.entity';
 
 @ObjectType()
-@Entity('consumerSNSAccount')
-export class ConsumerSNSAccount extends BaseEntity {
+@Entity('consumerJob')
+export class ConsumerJob extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: number;
@@ -22,13 +22,13 @@ export class ConsumerSNSAccount extends BaseEntity {
   @Field(() => Number)
   consumerId: number;
 
-  @Column({ type: 'varchar' })
-  @Field(() => String)
-  sns: string;
+  @Column({ type: 'int' })
+  @Field(() => Number)
+  jobId: number;
 
-  @Column({ type: 'varchar' })
-  @Field(() => String)
-  profileUrl: string;
+  @Column({ type: 'boolean' })
+  @Field(() => Boolean)
+  status: boolean;
 
   @Column({ type: 'timestamp without time zone' })
   @Field(() => Date)
@@ -51,5 +51,5 @@ export class ConsumerSNSAccount extends BaseEntity {
 
   @ManyToOne(() => Consumer, (consumer) => consumer.consumerSNSAccounts)
   @Field(() => Consumer)
-  consumer: Promise<Consumer>;
+  consumer: Consumer;
 }
