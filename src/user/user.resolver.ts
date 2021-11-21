@@ -120,7 +120,7 @@ export class UserResolver {
   @UseGuards(UserGuard)
   async consumerPhotosInEvent(
     @Args('consumerId', { type: () => Int }) consumerId: number,
-    @Args('eventId', { type: () => Int }) eventId: number
+    @Args('eventId', { type: () => Int }) eventId: number,
   ) {
     const photos = [];
     const inputConsumer = await Consumer.findOne(consumerId);

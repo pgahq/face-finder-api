@@ -8,7 +8,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { Queue } from 'bull';
+import { Job, Queue } from 'bull';
 import * as FormData from 'form-data';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
@@ -19,9 +19,11 @@ import { Event } from 'event/entities/event.entity';
 import { ConsumerPhoto } from 'photo/entities/consumer-photo.entity';
 import { ComprefaceService } from 'utils';
 
+import { ConsumerEventType } from './dto/consumer-event.type';
 import { SNSAccountInput } from './dto/sns-account.input';
 import { VerifyConsumerType } from './dto/verify-consumer.type';
 import { Consumer } from './entities/consumer.entity';
+import { ConsumerJob } from './entities/consumer-job.entity';
 import { ConsumerSNSAccount } from './entities/consumer-sns-account.entity';
 import { newConsumerQueueConstants } from './new-consumer-queue.constant';
 
@@ -69,10 +71,7 @@ export class ConsumerResolver {
         throw new InternalServerErrorException(error);
       }
       await consumer.save();
-      await this.newConsumerQueue.add(
-        newConsumerQueueConstants.handler,
-        consumer,
-      );
+      await this.consumerJob(consumer);
     } else {
       // verify consumer with selfie input
       let matching = false;
@@ -107,6 +106,22 @@ export class ConsumerResolver {
       }),
       expiresIn: this.configService.get<string>('auth.expiresIn'),
     };
+  }
+
+  async consumerJob(consumer: Consumer) {
+    try {
+      const job = await this.newConsumerQueue.add(
+        newConsumerQueueConstants.handler,
+        consumer,
+      );
+      const consumerJob = new ConsumerJob();
+      consumerJob.consumer = consumer;
+      consumerJob.jobId = Number(job.id);
+      consumerJob.status = false;
+      await consumerJob.save();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   @Mutation(() => Consumer)
@@ -162,7 +177,7 @@ export class ConsumerResolver {
     return await Consumer.find();
   }
 
-  @Query(() => [Event])
+  @Query(() => ConsumerEventType)
   @UseGuards(ConsumerGuard)
   async myEvents(@CurrentUser() consumer: Consumer) {
     const eventMap = new Map<number, Event>();
@@ -174,6 +189,22 @@ export class ConsumerResolver {
         eventMap.set(event.id, event);
       }
     }
-    return Array.from(eventMap.values());
+    const consumerJob = await ConsumerJob.findOne({
+      consumerId: consumer.id,
+    });
+    if (consumerJob && !consumerJob.status) {
+      return {
+        consumer: consumer,
+        status: false,
+        events: [],
+      };
+    }
+    // no job + job done
+    // handle old consumers
+    return {
+      consumer: consumer,
+      events: Array.from(eventMap.values()),
+      status: true,
+    };
   }
 }

@@ -10,6 +10,7 @@ import { Job } from 'bull';
 
 import { ConsumerService } from '../consumer.service';
 import { Consumer } from '../entities/consumer.entity';
+import { ConsumerJob } from '../entities/consumer-job.entity';
 import { newConsumerQueueConstants } from '../new-consumer-queue.constant';
 
 @Processor(newConsumerQueueConstants.name)
@@ -27,7 +28,19 @@ export class NewConsumerProcessor {
   }
 
   @OnQueueCompleted()
-  onComplete(job: Job) {
+  async onComplete(job: Job) {
+    try {
+      const consumerJob = await ConsumerJob.findOne({
+        consumerId: job.data.id,
+        jobId: Number(job.id),
+      });
+      if (consumerJob) {
+        consumerJob.status = true;
+        await consumerJob.save();
+      }
+    } catch (e) {
+      console.error(e);
+    }
     console.log(
       `Processor:@OnQueueCompleted - Completed job ${job.id} of type ${job.name}.`,
     );

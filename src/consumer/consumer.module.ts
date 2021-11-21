@@ -17,6 +17,7 @@ import { ConsumerAnswer } from 'question/entities/consumer-answer.entity';
 import { ConsumerResolver } from './consumer.resolver';
 import { ConsumerService } from './consumer.service';
 import { Consumer } from './entities/consumer.entity';
+import { ConsumerJob } from './entities/consumer-job.entity';
 import { ConsumerSNSAccount } from './entities/consumer-sns-account.entity';
 import { newConsumerQueueConstants } from './new-consumer-queue.constant';
 import { NewConsumerProcessor } from './processors/new-consumer.processor';
@@ -31,6 +32,7 @@ import { NewConsumerProcessor } from './processors/new-consumer.processor';
       ConsumerAnswer,
       ConsumerPartner,
       ConsumerSNSAccount,
+      ConsumerJob,
     ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
